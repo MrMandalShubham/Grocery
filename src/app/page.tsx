@@ -1,6 +1,5 @@
 import { getProducts, getCategories } from "@/services/inventory";
-import ProductCard from "@/components/ProductCard";
-import Link from "next/link";
+import HomeCatalog from "@/components/HomeCatalog";
 
 export default async function Home() {
   const products = await getProducts();
@@ -51,41 +50,7 @@ export default async function Home() {
         </button>
       </section>
 
-      {/* Categories Grid (10 items) */}
-      <section>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-extrabold tracking-tight">Shop by category</h2>
-        </div>
-        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-3">
-          {categories.map((cat) => (
-            <Link key={cat.id} href={`/category/${cat.id}`} className="flex flex-col items-center gap-2 text-center py-3 px-1 rounded-2xl hover:bg-green-mist transition group cursor-pointer">
-              <div className="w-16 h-16 rounded-2xl bg-green-soft text-green-deep flex items-center justify-center text-3xl transition-transform group-hover:-translate-y-1 shadow-sm border border-green-soft">
-                {cat.icon}
-              </div>
-              <span className="text-xs font-semibold leading-tight text-ink">{cat.name}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Carousels for each category with items */}
-      <div className="flex flex-col gap-10">
-        {categorizedProducts.map((group, idx) => (
-          <section key={idx}>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-extrabold tracking-tight">{group.title}</h2>
-              <Link href={`/category/${group.categoryId}`} className="text-green-deep font-bold text-sm hover:underline">See all →</Link>
-            </div>
-            <div className="flex gap-4 overflow-x-auto pb-4 snap-x -mx-4 px-4 md:mx-0 md:px-0" style={{scrollbarWidth: 'none'}}>
-              {group.list.map((product) => (
-                <div key={product.id} className="snap-start flex-none w-[160px] md:w-[172px]">
-                  <ProductCard product={product} />
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
+      <HomeCatalog categories={categories} categorizedProducts={categorizedProducts} />
     </div>
   );
 }
