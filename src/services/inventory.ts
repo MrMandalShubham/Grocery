@@ -1,3 +1,9 @@
+export interface Category {
+  id: string;
+  name: string;
+  icon: string;
+}
+
 export interface Product {
   id: string;
   sku: string;
@@ -10,16 +16,36 @@ export interface Product {
   stock: number;
 }
 
+export const mockCategories: Category[] = [
+  { id: "fv", name: "Fruits & Veggies", icon: "🥬" },
+  { id: "dairy", name: "Dairy & Breakfast", icon: "🥛" },
+  { id: "snacks", name: "Snacks & Munchies", icon: "🍿" },
+  { id: "drinks", name: "Cold Drinks", icon: "🥤" },
+  { id: "house", name: "Household", icon: "🧼" },
+  { id: "frozen", name: "Instant & Frozen", icon: "❄️" },
+  { id: "bakery", name: "Bakery", icon: "🍞" },
+  { id: "staples", name: "Staples", icon: "🍚" },
+  { id: "personal", name: "Personal Care", icon: "🧴" },
+  { id: "baby", name: "Baby Care", icon: "👶" },
+];
+
 const mockProducts: Product[] = [
-  { id: "1", sku: "MILK-500", name: "Amul Taaza Toned Milk", unit: "500 ml", category: "Dairy", cost: 22, retailPrice: 26, mrp: 26, stock: 45 },
-  { id: "2", sku: "BREAD-WHT", name: "Harvest Gold White Bread", unit: "400 g", category: "Bakery", cost: 30, retailPrice: 40, mrp: 40, stock: 12 },
-  { id: "3", sku: "ONION-1KG", name: "Fresh Onion", unit: "1 kg", category: "Vegetables", cost: 25, retailPrice: 35, mrp: 45, stock: 2 },
-  { id: "4", sku: "MAGGI-140", name: "Maggi 2-Minute Noodles", unit: "140 g", category: "Snacks", cost: 24, retailPrice: 28, mrp: 28, stock: 100 },
-  { id: "5", sku: "RICE-5KG", name: "India Gate Basmati Rice", unit: "5 kg", category: "Staples", cost: 450, retailPrice: 520, mrp: 550, stock: 0 },
-  { id: "6", sku: "COKE-750", name: "Coca Cola", unit: "750 ml", category: "Beverages", cost: 32, retailPrice: 40, mrp: 40, stock: 8 },
+  { id: "1", sku: "MILK-500", name: "Amul Taaza Toned Milk", unit: "500 ml", category: "dairy", cost: 22, retailPrice: 26, mrp: 26, stock: 45 },
+  { id: "2", sku: "BREAD-WHT", name: "Harvest Gold White Bread", unit: "400 g", category: "bakery", cost: 30, retailPrice: 40, mrp: 40, stock: 12 },
+  { id: "3", sku: "ONION-1KG", name: "Fresh Onion", unit: "1 kg", category: "fv", cost: 25, retailPrice: 35, mrp: 45, stock: 2 },
+  { id: "4", sku: "MAGGI-140", name: "Maggi 2-Minute Noodles", unit: "140 g", category: "snacks", cost: 24, retailPrice: 28, mrp: 28, stock: 100 },
+  { id: "5", sku: "RICE-5KG", name: "India Gate Basmati Rice", unit: "5 kg", category: "staples", cost: 450, retailPrice: 520, mrp: 550, stock: 0 },
+  { id: "6", sku: "COKE-750", name: "Coca Cola", unit: "750 ml", category: "drinks", cost: 32, retailPrice: 40, mrp: 40, stock: 8 },
+  { id: "7", sku: "LAY-MAGIC", name: "Lays Magic Masala", unit: "50 g", category: "snacks", cost: 16, retailPrice: 20, mrp: 20, stock: 35 },
+  { id: "8", sku: "SURF-1KG", name: "Surf Excel Matic", unit: "1 kg", category: "house", cost: 180, retailPrice: 220, mrp: 240, stock: 15 },
+  { id: "9", sku: "EGG-6", name: "Farm Fresh Eggs", unit: "6 pcs", category: "dairy", cost: 40, retailPrice: 50, mrp: 55, stock: 22 },
+  { id: "10", sku: "APPLE-K", name: "Kashmir Apples", unit: "1 kg", category: "fv", cost: 120, retailPrice: 160, mrp: 200, stock: 10 },
 ];
 
 export async function getProducts(): Promise<Product[]> {
-  // Simulate network delay
-  return new Promise((resolve) => setTimeout(() => resolve(mockProducts), 300));
+  return new Promise((resolve) => setTimeout(() => resolve(mockProducts), 100));
+}
+
+export async function getCategories(): Promise<Category[]> {
+  return new Promise((resolve) => setTimeout(() => resolve(mockCategories), 100));
 }
