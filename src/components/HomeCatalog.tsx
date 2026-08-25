@@ -66,9 +66,11 @@ export default function HomeCatalog({
             {categories.find(c => c.id === selectedCategory)?.name}
           </h2>
           {selectedGroup && selectedGroup.list.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="flex flex-wrap gap-4">
               {selectedGroup.list.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <div key={product.id} className="w-[160px] md:w-[172px]">
+                  <ProductCard product={product} />
+                </div>
               ))}
             </div>
           ) : (
