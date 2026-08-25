@@ -1,0 +1,1683 @@
+{
+  "sessions": [],
+  "users": [],
+  "otps": {},
+  "ordersSeq": 2000,
+  "orders": [
+    {
+      "id": "BK1000",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Parle-G Gold",
+          "q": 3
+        }
+      ],
+      "itemTotal": 270,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 274,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 13,
+      "status": "packed",
+      "riderId": null,
+      "createdAt": "2026-08-23T15:28:03.670Z"
+    },
+    {
+      "id": "BK1001",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Tata Tea Gold",
+          "q": 1
+        },
+        {
+          "name": "Spinach (Palak)",
+          "q": 1
+        }
+      ],
+      "itemTotal": 155,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 174,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 15,
+      "status": "packed",
+      "riderId": null,
+      "createdAt": "2026-08-23T09:52:03.670Z"
+    },
+    {
+      "id": "BK1002",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Dettol Original Soap",
+          "q": 3
+        },
+        {
+          "name": "Garbage Bags",
+          "q": 1
+        }
+      ],
+      "itemTotal": 382,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 386,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 14,
+      "status": "placed",
+      "riderId": null,
+      "createdAt": "2026-08-23T04:16:03.670Z"
+    },
+    {
+      "id": "BK1003",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Haldiram’s Bhujia",
+          "q": 3
+        },
+        {
+          "name": "Apple (Shimla)",
+          "q": 1
+        },
+        {
+          "name": "Real Mixed Fruit Juice",
+          "q": 2
+        }
+      ],
+      "itemTotal": 532,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 536,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 9,
+      "status": "packed",
+      "riderId": null,
+      "createdAt": "2026-08-22T22:40:03.670Z"
+    },
+    {
+      "id": "BK1004",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "India Gate Basmati Rice",
+          "q": 1
+        }
+      ],
+      "itemTotal": 99,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 118,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 8,
+      "status": "packed",
+      "riderId": null,
+      "createdAt": "2026-08-22T17:04:03.670Z"
+    },
+    {
+      "id": "BK1005",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Dove Shampoo",
+          "q": 3
+        },
+        {
+          "name": "Amul Vanilla Tub",
+          "q": 1
+        },
+        {
+          "name": "Tata Tea Gold",
+          "q": 1
+        }
+      ],
+      "itemTotal": 980,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 984,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 11,
+      "status": "packed",
+      "riderId": null,
+      "createdAt": "2026-08-22T11:28:03.670Z"
+    },
+    {
+      "id": "BK1006",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Potato (New)",
+          "q": 2
+        }
+      ],
+      "itemTotal": 64,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 83,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 8,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-22T05:52:03.670Z"
+    },
+    {
+      "id": "BK1007",
+      "kind": "b2b",
+      "shopId": "21e50dd53b1da35b",
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Sprite",
+          "q": 1,
+          "price": 29
+        },
+        {
+          "name": "Tomato (Hybrid)",
+          "q": 1,
+          "price": 18
+        },
+        {
+          "name": "Organic India Green Tea",
+          "q": 2,
+          "price": 68
+        }
+      ],
+      "itemTotal": 255,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 0,
+      "total": 183,
+      "addressLabel": "GreenMart",
+      "paymentLabel": "Shop credit",
+      "eta": 12,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-22T00:16:03.670Z"
+    },
+    {
+      "id": "BK1008",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "India Gate Basmati Rice",
+          "q": 2
+        },
+        {
+          "name": "Colgate MaxFresh",
+          "q": 3
+        },
+        {
+          "name": "Kurkure Masala Munch",
+          "q": 2
+        }
+      ],
+      "itemTotal": 463,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 467,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 14,
+      "status": "out_for_delivery",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-21T18:40:03.670Z"
+    },
+    {
+      "id": "BK1009",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Haldiram’s Bhujia",
+          "q": 2
+        },
+        {
+          "name": "Amul Paneer",
+          "q": 2
+        },
+        {
+          "name": "Aashirvaad Atta",
+          "q": 2
+        }
+      ],
+      "itemTotal": 778,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 782,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 9,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-21T13:04:03.670Z"
+    },
+    {
+      "id": "BK1010",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Onion",
+          "q": 3
+        },
+        {
+          "name": "Haldiram’s Bhujia",
+          "q": 2
+        }
+      ],
+      "itemTotal": 200,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 204,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 10,
+      "status": "out_for_delivery",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-21T07:28:03.670Z"
+    },
+    {
+      "id": "BK1011",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Kurkure Masala Munch",
+          "q": 1
+        },
+        {
+          "name": "Maggi Noodles",
+          "q": 3
+        },
+        {
+          "name": "Head & Shoulders",
+          "q": 3
+        }
+      ],
+      "itemTotal": 785,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 789,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 15,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-21T01:52:03.670Z"
+    },
+    {
+      "id": "BK1012",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Nescafé Classic",
+          "q": 1
+        }
+      ],
+      "itemTotal": 180,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 199,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 9,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-20T20:16:03.670Z"
+    },
+    {
+      "id": "BK1013",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "KitKat",
+          "q": 3
+        },
+        {
+          "name": "KitKat",
+          "q": 3
+        },
+        {
+          "name": "Lay’s Magic Masala",
+          "q": 1
+        }
+      ],
+      "itemTotal": 140,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 159,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 15,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-20T14:40:03.670Z"
+    },
+    {
+      "id": "BK1014",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Tomato (Hybrid)",
+          "q": 3
+        },
+        {
+          "name": "Spinach (Palak)",
+          "q": 2
+        },
+        {
+          "name": "Coca-Cola",
+          "q": 1
+        }
+      ],
+      "itemTotal": 145,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 164,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 9,
+      "status": "out_for_delivery",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-20T09:04:03.670Z"
+    },
+    {
+      "id": "BK1015",
+      "kind": "b2b",
+      "shopId": "21e50dd53b1da35b",
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Haldiram’s Bhujia",
+          "q": 2,
+          "price": 39
+        },
+        {
+          "name": "Haldiram’s Bhujia",
+          "q": 3,
+          "price": 39
+        },
+        {
+          "name": "Real Mixed Fruit Juice",
+          "q": 2,
+          "price": 70
+        }
+      ],
+      "itemTotal": 473,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 0,
+      "total": 335,
+      "addressLabel": "GreenMart",
+      "paymentLabel": "Shop credit",
+      "eta": 8,
+      "status": "out_for_delivery",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-20T03:28:03.670Z"
+    },
+    {
+      "id": "BK1016",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Parle-G Gold",
+          "q": 1
+        },
+        {
+          "name": "Potato (New)",
+          "q": 1
+        },
+        {
+          "name": "Garbage Bags",
+          "q": 1
+        }
+      ],
+      "itemTotal": 207,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 211,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 13,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-19T21:52:03.670Z"
+    },
+    {
+      "id": "BK1017",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "India Gate Basmati Rice",
+          "q": 2
+        },
+        {
+          "name": "Head & Shoulders",
+          "q": 1
+        },
+        {
+          "name": "Spinach (Palak)",
+          "q": 3
+        }
+      ],
+      "itemTotal": 442,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 446,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 16,
+      "status": "out_for_delivery",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-19T16:16:03.670Z"
+    },
+    {
+      "id": "BK1018",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Potato (New)",
+          "q": 1
+        }
+      ],
+      "itemTotal": 32,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 51,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 8,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-19T10:40:03.670Z"
+    },
+    {
+      "id": "BK1019",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Toor Dal",
+          "q": 2
+        },
+        {
+          "name": "Farm Eggs",
+          "q": 2
+        },
+        {
+          "name": "India Gate Basmati Rice",
+          "q": 3
+        }
+      ],
+      "itemTotal": 651,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 655,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 8,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-19T05:04:03.670Z"
+    },
+    {
+      "id": "BK1020",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Garbage Bags",
+          "q": 1
+        }
+      ],
+      "itemTotal": 85,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 104,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 9,
+      "status": "delivered",
+      "riderId": "c559c4aeb26472f9",
+      "createdAt": "2026-08-18T23:28:03.670Z"
+    },
+    {
+      "id": "BK1021",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Amul Vanilla Tub",
+          "q": 2
+        }
+      ],
+      "itemTotal": 420,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 424,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 15,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-18T17:52:03.670Z"
+    },
+    {
+      "id": "BK1022",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Spinach (Palak)",
+          "q": 1
+        }
+      ],
+      "itemTotal": 15,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 34,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 16,
+      "status": "cancelled",
+      "riderId": null,
+      "createdAt": "2026-08-18T12:16:03.670Z"
+    },
+    {
+      "id": "BK1023",
+      "kind": "b2b",
+      "shopId": "857b67dd87f1c00e",
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Amul Butter",
+          "q": 2,
+          "price": 43
+        }
+      ],
+      "itemTotal": 118,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 0,
+      "total": 86,
+      "addressLabel": "Sri Balaji Stores",
+      "paymentLabel": "Shop credit",
+      "eta": 15,
+      "status": "cancelled",
+      "riderId": null,
+      "createdAt": "2026-08-18T06:40:03.670Z"
+    },
+    {
+      "id": "BK1024",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Sprite",
+          "q": 2
+        }
+      ],
+      "itemTotal": 80,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 99,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 12,
+      "status": "delivered",
+      "riderId": "c559c4aeb26472f9",
+      "createdAt": "2026-08-18T01:04:03.670Z"
+    },
+    {
+      "id": "BK1025",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Organic India Green Tea",
+          "q": 2
+        },
+        {
+          "name": "Banana (Robusta)",
+          "q": 3
+        }
+      ],
+      "itemTotal": 304,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 308,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 9,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-17T19:28:03.670Z"
+    },
+    {
+      "id": "BK1026",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Head & Shoulders",
+          "q": 1
+        },
+        {
+          "name": "Maggi Noodles",
+          "q": 2
+        },
+        {
+          "name": "Amul Taaza Milk",
+          "q": 3
+        }
+      ],
+      "itemTotal": 392,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 396,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 9,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-17T13:52:03.670Z"
+    },
+    {
+      "id": "BK1027",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Apple (Shimla)",
+          "q": 3
+        },
+        {
+          "name": "Sprite",
+          "q": 2
+        }
+      ],
+      "itemTotal": 587,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 591,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 12,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-17T08:16:03.670Z"
+    },
+    {
+      "id": "BK1028",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Amul Butter",
+          "q": 3
+        },
+        {
+          "name": "Vim Dishwash Gel",
+          "q": 3
+        },
+        {
+          "name": "Spinach (Palak)",
+          "q": 2
+        }
+      ],
+      "itemTotal": 387,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 391,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 14,
+      "status": "cancelled",
+      "riderId": null,
+      "createdAt": "2026-08-17T02:40:03.670Z"
+    },
+    {
+      "id": "BK1029",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Tata Salt",
+          "q": 2
+        }
+      ],
+      "itemTotal": 56,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 75,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 15,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-16T21:04:03.670Z"
+    },
+    {
+      "id": "BK1030",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Haldiram’s Bhujia",
+          "q": 2
+        }
+      ],
+      "itemTotal": 110,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 129,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 12,
+      "status": "cancelled",
+      "riderId": null,
+      "createdAt": "2026-08-16T15:28:03.670Z"
+    },
+    {
+      "id": "BK1031",
+      "kind": "b2b",
+      "shopId": "21e50dd53b1da35b",
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Cadbury Dairy Milk",
+          "q": 3,
+          "price": 32
+        },
+        {
+          "name": "Spinach (Palak)",
+          "q": 3,
+          "price": 10
+        },
+        {
+          "name": "Dove Shampoo",
+          "q": 2,
+          "price": 150
+        }
+      ],
+      "itemTotal": 600,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 0,
+      "total": 426,
+      "addressLabel": "GreenMart",
+      "paymentLabel": "Shop credit",
+      "eta": 10,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-16T09:52:03.670Z"
+    },
+    {
+      "id": "BK1032",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Kurkure Masala Munch",
+          "q": 3
+        },
+        {
+          "name": "Toor Dal",
+          "q": 2
+        }
+      ],
+      "itemTotal": 318,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 322,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 13,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-16T04:16:03.670Z"
+    },
+    {
+      "id": "BK1033",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Garbage Bags",
+          "q": 2
+        },
+        {
+          "name": "Spinach (Palak)",
+          "q": 2
+        }
+      ],
+      "itemTotal": 200,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 204,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 16,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-15T22:40:03.670Z"
+    },
+    {
+      "id": "BK1034",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Amul Vanilla Tub",
+          "q": 3
+        },
+        {
+          "name": "Haldiram’s Bhujia",
+          "q": 1
+        }
+      ],
+      "itemTotal": 685,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 689,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 12,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-15T17:04:03.670Z"
+    },
+    {
+      "id": "BK1035",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Bisleri Water",
+          "q": 2
+        },
+        {
+          "name": "Lay’s Magic Masala",
+          "q": 3
+        }
+      ],
+      "itemTotal": 100,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 119,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 10,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-15T11:28:03.670Z"
+    },
+    {
+      "id": "BK1036",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Head & Shoulders",
+          "q": 1
+        },
+        {
+          "name": "Dr. Oetker Mayo",
+          "q": 2
+        }
+      ],
+      "itemTotal": 369,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 373,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 14,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-15T05:52:03.670Z"
+    },
+    {
+      "id": "BK1037",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Dr. Oetker Mayo",
+          "q": 2
+        },
+        {
+          "name": "Spinach (Palak)",
+          "q": 3
+        }
+      ],
+      "itemTotal": 215,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 219,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 9,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-15T00:16:03.670Z"
+    },
+    {
+      "id": "BK1038",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Harpic Power Plus",
+          "q": 3
+        }
+      ],
+      "itemTotal": 267,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 271,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 12,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-14T18:40:03.670Z"
+    },
+    {
+      "id": "BK1039",
+      "kind": "b2b",
+      "shopId": "2a8a96c28fd701c6",
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Toor Dal",
+          "q": 3,
+          "price": 92
+        },
+        {
+          "name": "Haldiram’s Bhujia",
+          "q": 1,
+          "price": 39
+        }
+      ],
+      "itemTotal": 442,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 0,
+      "total": 315,
+      "addressLabel": "FreshPoint Kirana",
+      "paymentLabel": "Shop credit",
+      "eta": 10,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-14T13:04:03.670Z"
+    },
+    {
+      "id": "BK1040",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Dove Shampoo",
+          "q": 1
+        },
+        {
+          "name": "Amul Butter",
+          "q": 3
+        },
+        {
+          "name": "Banana (Robusta)",
+          "q": 3
+        }
+      ],
+      "itemTotal": 501,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 505,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 14,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-14T07:28:03.670Z"
+    },
+    {
+      "id": "BK1041",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Surf Excel Matic",
+          "q": 3
+        },
+        {
+          "name": "Banana (Robusta)",
+          "q": 1
+        },
+        {
+          "name": "Spinach (Palak)",
+          "q": 1
+        }
+      ],
+      "itemTotal": 503,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 507,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 9,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-14T01:52:03.670Z"
+    },
+    {
+      "id": "BK1042",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Oreo Biscuits",
+          "q": 2
+        },
+        {
+          "name": "Real Mixed Fruit Juice",
+          "q": 1
+        }
+      ],
+      "itemTotal": 159,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 178,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 13,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-13T20:16:03.670Z"
+    },
+    {
+      "id": "BK1043",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Tata Salt",
+          "q": 3
+        }
+      ],
+      "itemTotal": 84,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 103,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 16,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-13T14:40:03.670Z"
+    },
+    {
+      "id": "BK1044",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Apple (Shimla)",
+          "q": 1
+        }
+      ],
+      "itemTotal": 169,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 188,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 11,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-13T09:04:03.670Z"
+    },
+    {
+      "id": "BK1045",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Vim Dishwash Gel",
+          "q": 2
+        }
+      ],
+      "itemTotal": 120,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 139,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 11,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-13T03:28:03.670Z"
+    },
+    {
+      "id": "BK1046",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Tomato (Hybrid)",
+          "q": 2
+        }
+      ],
+      "itemTotal": 50,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 69,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 12,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-12T21:52:03.670Z"
+    },
+    {
+      "id": "BK1047",
+      "kind": "b2b",
+      "shopId": "857b67dd87f1c00e",
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Banana (Robusta)",
+          "q": 3,
+          "price": 28
+        },
+        {
+          "name": "Sprite",
+          "q": 3,
+          "price": 29
+        }
+      ],
+      "itemTotal": 234,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 0,
+      "total": 171,
+      "addressLabel": "Sri Balaji Stores",
+      "paymentLabel": "Shop credit",
+      "eta": 10,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-12T16:16:03.670Z"
+    },
+    {
+      "id": "BK1048",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Amul Vanilla Tub",
+          "q": 3
+        },
+        {
+          "name": "Amul Vanilla Tub",
+          "q": 1
+        },
+        {
+          "name": "Oreo Biscuits",
+          "q": 1
+        }
+      ],
+      "itemTotal": 870,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 874,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 14,
+      "status": "delivered",
+      "riderId": "c559c4aeb26472f9",
+      "createdAt": "2026-08-12T10:40:03.670Z"
+    },
+    {
+      "id": "BK1049",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Lay’s Magic Masala",
+          "q": 1
+        },
+        {
+          "name": "Real Mixed Fruit Juice",
+          "q": 1
+        }
+      ],
+      "itemTotal": 119,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 138,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 13,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-12T05:04:03.670Z"
+    },
+    {
+      "id": "BK1050",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Farm Eggs",
+          "q": 2
+        }
+      ],
+      "itemTotal": 96,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 115,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 14,
+      "status": "delivered",
+      "riderId": "c559c4aeb26472f9",
+      "createdAt": "2026-08-11T23:28:03.670Z"
+    },
+    {
+      "id": "BK1051",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Spinach (Palak)",
+          "q": 1
+        }
+      ],
+      "itemTotal": 15,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 34,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 13,
+      "status": "delivered",
+      "riderId": "4e489a89762e84d8",
+      "createdAt": "2026-08-11T17:52:03.670Z"
+    },
+    {
+      "id": "BK1052",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Mother Dairy Curd",
+          "q": 1
+        }
+      ],
+      "itemTotal": 34,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 53,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 15,
+      "status": "delivered",
+      "riderId": "c562ea004c13d11a",
+      "createdAt": "2026-08-11T12:16:03.670Z"
+    },
+    {
+      "id": "BK1053",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Cadbury Dairy Milk",
+          "q": 1
+        }
+      ],
+      "itemTotal": 45,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 64,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 16,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-11T06:40:03.670Z"
+    },
+    {
+      "id": "BK1054",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Tata Tea Gold",
+          "q": 3
+        },
+        {
+          "name": "Aashirvaad Atta",
+          "q": 3
+        }
+      ],
+      "itemTotal": 1167,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 1171,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 14,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-11T01:04:03.670Z"
+    },
+    {
+      "id": "BK1055",
+      "kind": "b2b",
+      "shopId": "857b67dd87f1c00e",
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Safal Frozen Peas",
+          "q": 3,
+          "price": 54
+        },
+        {
+          "name": "English Oven Bread",
+          "q": 3,
+          "price": 28
+        },
+        {
+          "name": "Madhur Sugar",
+          "q": 1,
+          "price": 32
+        }
+      ],
+      "itemTotal": 384,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 0,
+      "total": 278,
+      "addressLabel": "Sri Balaji Stores",
+      "paymentLabel": "Shop credit",
+      "eta": 14,
+      "status": "delivered",
+      "riderId": "c559c4aeb26472f9",
+      "createdAt": "2026-08-10T19:28:03.670Z"
+    },
+    {
+      "id": "BK1056",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Lay’s Magic Masala",
+          "q": 3
+        }
+      ],
+      "itemTotal": 60,
+      "discount": 0,
+      "delivery": 15,
+      "handling": 4,
+      "total": 79,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 12,
+      "status": "delivered",
+      "riderId": "c559c4aeb26472f9",
+      "createdAt": "2026-08-10T13:52:03.671Z"
+    },
+    {
+      "id": "BK1057",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "India Gate Basmati Rice",
+          "q": 1
+        },
+        {
+          "name": "Dove Shampoo",
+          "q": 1
+        }
+      ],
+      "itemTotal": 309,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 313,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 9,
+      "status": "delivered",
+      "riderId": "c559c4aeb26472f9",
+      "createdAt": "2026-08-10T08:16:03.671Z"
+    },
+    {
+      "id": "BK1058",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Garbage Bags",
+          "q": 2
+        },
+        {
+          "name": "Madhur Sugar",
+          "q": 1
+        }
+      ],
+      "itemTotal": 215,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 219,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 16,
+      "status": "delivered",
+      "riderId": "28a68b26e5b1c44f",
+      "createdAt": "2026-08-10T02:40:03.671Z"
+    },
+    {
+      "id": "BK1059",
+      "kind": "b2c",
+      "shopId": null,
+      "sessionId": "seed",
+      "items": [
+        {
+          "name": "Farm Eggs",
+          "q": 3
+        },
+        {
+          "name": "KitKat",
+          "q": 2
+        },
+        {
+          "name": "Sprite",
+          "q": 1
+        }
+      ],
+      "itemTotal": 224,
+      "discount": 0,
+      "delivery": 0,
+      "handling": 4,
+      "total": 228,
+      "addressLabel": "Home",
+      "paymentLabel": "UPI",
+      "eta": 8,
+      "status": "delivered",
+      "riderId": "c559c4aeb26472f9",
+      "createdAt": "2026-08-09T21:04:03.671Z"
+    }
+  ],
+  "riders": [
+    {
+      "id": "c559c4aeb26472f9",
+      "name": "Arjun Kumar",
+      "phone": "9100000001"
+    },
+    {
+      "id": "c562ea004c13d11a",
+      "name": "Meena Joshi",
+      "phone": "9100000002"
+    },
+    {
+      "id": "4e489a89762e84d8",
+      "name": "Ravi Verma",
+      "phone": "9100000003"
+    },
+    {
+      "id": "28a68b26e5b1c44f",
+      "name": "Sana Sheikh",
+      "phone": "9100000004"
+    }
+  ],
+  "shops": [
+    {
+      "id": "857b67dd87f1c00e",
+      "name": "Sri Balaji Stores",
+      "phone": "9800000001",
+      "credit": 25000,
+      "createdAt": "2026-07-24T15:28:03.668Z"
+    },
+    {
+      "id": "21e50dd53b1da35b",
+      "name": "GreenMart",
+      "phone": "9800000002",
+      "credit": 12000,
+      "createdAt": "2026-08-01T15:28:03.670Z"
+    },
+    {
+      "id": "2a8a96c28fd701c6",
+      "name": "FreshPoint Kirana",
+      "phone": "9800000003",
+      "credit": 8000,
+      "createdAt": "2026-08-08T15:28:03.670Z"
+    }
+  ],
+  "movements": []
+}
