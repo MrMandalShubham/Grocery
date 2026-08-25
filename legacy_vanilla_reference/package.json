@@ -1,0 +1,13 @@
+{
+  "name": "blinkit-grocery",
+  "version": "1.0.0",
+  "description": "B2B2C quick-commerce platform — creamy-green themed. Zero-dependency Node backend + single-page frontend: customer storefront, provider admin (inventory / logistics / revenue), B2B shops.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

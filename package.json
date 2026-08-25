@@ -1,13 +1,27 @@
 {
-  "name": "blinkit-grocery",
-  "version": "1.0.0",
-  "description": "B2B2C quick-commerce platform — creamy-green themed. Zero-dependency Node backend + single-page frontend: customer storefront, provider admin (inventory / logistics / revenue), B2B shops.",
-  "main": "server.js",
+  "name": "grocery-app",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node server.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
-  "engines": {
-    "node": ">=18"
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.4",
+    "next": "16.3.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   },
-  "license": "MIT"
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
 }

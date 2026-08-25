@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  /* Creamy Green Palette */
+  --ink: #1D2A1E;
+  --ink-2: #45564A;
+  --ink-3: #5F7163;
+  --green: #3E7A4A;
+  --green-deep: #2F6B3C;
+  --green-ink: #245A34;
+  --green-soft: #E3EEDD;
+  --green-mist: #EDF5E8;
+  --cream: #F4F7EF;
+  --card: #FFFFFF;
+  --yellow: #F5C84C;
+  --yellow-ink: #3A2E08;
+  --line: #E2E8DE;
+  --danger: #B4493C;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-green: var(--green);
+  --color-green-deep: var(--green-deep);
+  --color-green-ink: var(--green-ink);
+  --color-green-soft: var(--green-soft);
+  --color-green-mist: var(--green-mist);
+  --color-cream: var(--cream);
+  --color-card: var(--card);
+  --color-yellow: var(--yellow);
+  --color-yellow-ink: var(--yellow-ink);
+  --color-line: var(--line);
+  --color-danger: var(--danger);
+
+  --font-sans: var(--font-jakarta), Arial, Helvetica, sans-serif;
+  
+  --color-background: var(--cream);
+  --color-foreground: var(--ink);
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-jakarta), Arial, Helvetica, sans-serif;
+}
