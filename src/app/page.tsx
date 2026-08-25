@@ -8,6 +8,7 @@ export default async function Home() {
 
   // Group products by category
   const categorizedProducts = categories.map(cat => ({
+    categoryId: cat.id,
     title: cat.name,
     list: products.filter(p => p.category === cat.id)
   })).filter(group => group.list.length > 0);
@@ -57,7 +58,7 @@ export default async function Home() {
         </div>
         <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-3">
           {categories.map((cat) => (
-            <Link key={cat.id} href={`#`} className="flex flex-col items-center gap-2 text-center py-3 px-1 rounded-2xl hover:bg-green-mist transition group cursor-pointer">
+            <Link key={cat.id} href={`/category/${cat.id}`} className="flex flex-col items-center gap-2 text-center py-3 px-1 rounded-2xl hover:bg-green-mist transition group cursor-pointer">
               <div className="w-16 h-16 rounded-2xl bg-green-soft text-green-deep flex items-center justify-center text-3xl transition-transform group-hover:-translate-y-1 shadow-sm border border-green-soft">
                 {cat.icon}
               </div>
@@ -73,7 +74,7 @@ export default async function Home() {
           <section key={idx}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-extrabold tracking-tight">{group.title}</h2>
-              <Link href="#" className="text-green-deep font-bold text-sm hover:underline">See all →</Link>
+              <Link href={`/category/${group.categoryId}`} className="text-green-deep font-bold text-sm hover:underline">See all →</Link>
             </div>
             <div className="flex gap-4 overflow-x-auto pb-4 snap-x -mx-4 px-4 md:mx-0 md:px-0" style={{scrollbarWidth: 'none'}}>
               {group.list.map((product) => (
