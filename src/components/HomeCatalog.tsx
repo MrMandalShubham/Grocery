@@ -61,8 +61,8 @@ export default function HomeCatalog({
 
       {/* Dynamic Product Area */}
       {selectedCategory ? (
-        <section className="bg-white border border-line rounded-3xl p-6 md:p-8 shadow-sm">
-          <h2 className="text-2xl font-extrabold tracking-tight mb-6">
+        <section>
+          <h2 className="text-xl font-extrabold tracking-tight mb-6">
             {categories.find(c => c.id === selectedCategory)?.name}
           </h2>
           {selectedGroup && selectedGroup.list.length > 0 ? (
