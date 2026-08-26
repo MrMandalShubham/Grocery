@@ -5,12 +5,29 @@ export default async function Home() {
   const products = await getProducts();
   const categories = await getCategories();
 
-  // Group products by category
+  // Generate "Trending Near You" (15 random products)
+  // We use a simple seeded random or just take a slice to ensure it's stable for SSR
+  const trendingList = [...products].sort((a, b) => (Number(a.id) * 7 % 10) - (Number(b.id) * 7 % 10)).slice(0, 15);
+  
+  // Generate "Biggest Discounts" (Sort by % off)
+  const discountList = [...products].sort((a, b) => {
+    const aOff = (a.mrp - a.retailPrice) / a.mrp;
+    const bOff = (b.mrp - b.retailPrice) / b.mrp;
+    return bOff - aOff;
+  }).slice(0, 15);
+
+  // Group normal products by category
   const categorizedProducts = categories.map(cat => ({
     categoryId: cat.id,
     title: cat.name,
     list: products.filter(p => p.category === cat.id)
   })).filter(group => group.list.length > 0);
+
+  const finalGroups = [
+    { categoryId: "trending", title: "🔥 Trending Near You", list: trendingList },
+    { categoryId: "discounts", title: "🏷️ Biggest Discounts Today", list: discountList },
+    ...categorizedProducts
+  ];
 
   return (
     <div className="flex flex-col gap-10 max-w-7xl mx-auto py-6">
@@ -50,7 +67,7 @@ export default async function Home() {
         </button>
       </section>
 
-      <HomeCatalog categories={categories} categorizedProducts={categorizedProducts} />
+      <HomeCatalog categories={categories} categorizedProducts={finalGroups} />
     </div>
   );
 }

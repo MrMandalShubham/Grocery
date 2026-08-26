@@ -63,7 +63,7 @@ export default function HomeCatalog({
       {selectedCategory ? (
         <section>
           <h2 className="text-xl font-extrabold tracking-tight mb-6">
-            {categories.find(c => c.id === selectedCategory)?.name}
+            {categories.find(c => c.id === selectedCategory)?.name || selectedGroup?.title || "Products"}
           </h2>
           {selectedGroup && selectedGroup.list.length > 0 ? (
             <div className="flex flex-wrap gap-4">
