@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import ProductCard from "@/components/ProductCard";
+import CuratedCarousel from "@/components/CuratedCarousel";
 import { Category, Product } from "@/services/inventory";
 
 interface CategorizedGroup {
@@ -94,12 +95,18 @@ export default function HomeCatalog({
                   See all →
                 </button>
               </div>
-              <div className="flex gap-4 overflow-x-auto pb-4 snap-x -mx-4 px-4 md:mx-0 md:px-0" style={{scrollbarWidth: 'none'}}>
-                {group.list.map((product) => (
-                  <div key={product.id} className="snap-start flex-none w-[170px] sm:w-[190px] md:w-[210px] lg:w-[230px]">
-                    <ProductCard product={product} />
+              <div className="mt-2">
+                {group.categoryId === 'trending' || group.categoryId === 'discounts' ? (
+                  <CuratedCarousel products={group.list} />
+                ) : (
+                  <div className="flex gap-4 overflow-x-auto pb-4 snap-x -mx-4 px-4 md:mx-0 md:px-0" style={{scrollbarWidth: 'none'}}>
+                    {group.list.map((product) => (
+                      <div key={product.id} className="snap-start flex-none w-[170px] sm:w-[190px] md:w-[210px] lg:w-[230px]">
+                        <ProductCard product={product} />
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
             </section>
           ))}
