@@ -1,4 +1,22 @@
-export interface Category {\n  id: string;\n  name: string;\n  icon: string;\n}\n\nexport interface Product {\n  id: string;\n  sku: string;\n  name: string;\n  unit: string;\n  category: string;\n  cost: number;\n  retailPrice: number;\n  mrp: number;\n  stock: number;\n}\n\nexport const mockCategories: Category[] = [
+export interface Category {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+export interface Product {
+  id: string;
+  sku: string;
+  name: string;
+  unit: string;
+  category: string;
+  cost: number;
+  retailPrice: number;
+  mrp: number;
+  stock: number;
+}
+
+export const mockCategories: Category[] = [
   {
     "id": "fv",
     "name": "Fruits & Veggies",
@@ -49,7 +67,9 @@ export interface Category {\n  id: string;\n  name: string;\n  icon: string;\n}\
     "name": "Personal Care",
     "icon": "🧴"
   }
-];\n\nconst mockProducts: Product[] = [
+];
+
+const mockProducts: Product[] = [
   {
     "id": "1",
     "sku": "FV-1",
@@ -2470,4 +2490,12 @@ export interface Category {\n  id: string;\n  name: string;\n  icon: string;\n}\
     "mrp": 217,
     "stock": 38
   }
-];\n\nexport async function getProducts(): Promise<Product[]> {\n  return new Promise((resolve) => setTimeout(() => resolve(mockProducts), 100));\n}\n\nexport async function getCategories(): Promise<Category[]> {\n  return new Promise((resolve) => setTimeout(() => resolve(mockCategories), 100));\n}\n
+];
+
+export async function getProducts(): Promise<Product[]> {
+  return new Promise((resolve) => setTimeout(() => resolve(mockProducts), 100));
+}
+
+export async function getCategories(): Promise<Category[]> {
+  return new Promise((resolve) => setTimeout(() => resolve(mockCategories), 100));
+}
