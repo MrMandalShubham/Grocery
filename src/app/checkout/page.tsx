@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function CheckoutPage() {
   const { items, cartTotal, clearCart } = useCart();
-  const { role } = useRole();
+  const { role, user } = useRole();
   const [orderStatus, setOrderStatus] = useState<"idle" | "processing" | "success">("idle");
   const [orderId, setOrderId] = useState<string | null>(null);
 
@@ -36,12 +36,59 @@ export default function CheckoutPage() {
   }
 
   const handlePayment = async () => {
+    if (!user) {
+      alert("Please log in to place an order.");
+      window.location.href = "/login";
+      return;
+    }
+
     setOrderStatus("processing");
-    // Simulate Razorpay / API delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setOrderId(`ORD-${Math.floor(100000 + Math.random() * 900000)}`);
-    clearCart();
-    setOrderStatus("success");
+    try {
+      const { supabase } = await import("@/lib/supabase");
+      
+      // 1. Create the Order
+      const { data: orderData, error: orderError } = await supabase
+        .from("orders")
+        .insert({
+          user_id: user.id,
+          status: "PAID",
+          total_amount: cartTotal,
+          final_amount: cartTotal,
+          payment_method: role === "B2B" ? "SHOP_CREDIT" : "RAZORPAY",
+        })
+        .select()
+        .single();
+        
+      if (orderError) throw orderError;
+
+      // 2. Create the Order Items
+      const orderItemsToInsert = items.map(item => ({
+        order_id: orderData.id,
+        external_product_id: item.id,
+        sku: item.sku,
+        name: item.name,
+        price_at_purchase: role === "B2B" ? Math.ceil(item.cost * 1.15) : item.retailPrice,
+        quantity: item.quantity
+      }));
+
+      const { error: itemsError } = await supabase
+        .from("order_items")
+        .insert(orderItemsToInsert);
+
+      if (itemsError) throw itemsError;
+
+      // Simulate a small delay for UI purposes
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      // Use the last segment of the UUID as a readable order ID
+      setOrderId(`ORD-${orderData.id.split("-")[0].toUpperCase()}`);
+      clearCart();
+      setOrderStatus("success");
+    } catch (err: any) {
+      console.error(err);
+      alert("Failed to place order: " + err.message);
+      setOrderStatus("idle");
+    }
   };
 
   return (
