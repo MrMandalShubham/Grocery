@@ -45,9 +45,29 @@ export const getProductByIdOrSlug = (slugOrSku: string) =>
   call<Product & { images: any[]; available_elsewhere: any[]; category_name?: string }>(
     `/api/products/${encodeURIComponent(slugOrSku)}?location=${LOCATION}`);
 
-export const getCategories = () =>
-  call<Category[]>(
-    `/api/categories?location=${LOCATION}`);
+export const ALL_CATEGORIES: Category[] = [
+  { id: "fv", name: "Fruits & Veggies", icon: "🥬", product_count: 0 },
+  { id: "dairy", name: "Dairy, Bread & Eggs", icon: "🥛", product_count: 0 },
+  { id: "staples", name: "Atta, Rice & Dal", icon: "🌾", product_count: 0 },
+  { id: "cooking", name: "Oil, Ghee & Masala", icon: "🛢️", product_count: 0 },
+  { id: "snacks", name: "Snacks & Namkeen", icon: "🍿", product_count: 0 },
+  { id: "drinks", name: "Cold Drinks", icon: "🥤", product_count: 0 },
+  { id: "instant", name: "Instant & Noodles", icon: "🍜", product_count: 0 },
+  { id: "bakery", name: "Bakery & Biscuits", icon: "🍪", product_count: 0 },
+  { id: "house", name: "Cleaning & Household", icon: "🧼", product_count: 0 },
+  { id: "personal", name: "Personal Care", icon: "🧴", product_count: 0 }
+];
+
+export const getCategories = async () => {
+  const apiCategories = await call<Category[]>(`/api/categories?location=${LOCATION}`).catch(() => []);
+  return ALL_CATEGORIES.map(staticCat => {
+    const apiMatch = apiCategories.find(c => c.id === staticCat.id);
+    return {
+      ...staticCat,
+      product_count: apiMatch ? apiMatch.product_count : 0
+    };
+  });
+};
 
 export const reserveInventory = (orderId: string, items: { sku: string; quantity: number }[]) =>
   call<any>("/api/inventory/reserve", {
