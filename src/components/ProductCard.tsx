@@ -26,7 +26,7 @@ export default function ProductCard({ product }: { product: Product }) {
         {isLowStock && <span className="bg-yellow text-yellow-ink text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-sm">ONLY {product.stock} LEFT</span>}
       </div>
 
-      <Link href={`/product/${product.id}`} className="flex flex-col flex-grow cursor-pointer group">
+      <Link href={`/product/${product.name.replace(/[^a-zA-Z0-9- ]/g, '').replace(/\s+/g, '-').toLowerCase()}`} className="flex flex-col flex-grow cursor-pointer group">
         {/* Image Placeholder */}
         <div className="w-full h-20 md:h-32 bg-green-mist rounded-xl mt-4 flex items-center justify-center text-green-soft group-hover:bg-[#d4eadb] transition">
           <span className="text-3xl md:text-4xl">🛒</span>

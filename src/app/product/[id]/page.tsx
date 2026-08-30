@@ -3,9 +3,14 @@ import Link from "next/link";
 import AddToCartLarge from "@/components/AddToCartLarge";
 import ProductCard from "@/components/ProductCard";
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
+export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const products = await getProducts();
-  const product = products.find(p => p.id === params.id);
+  const product = products.find(p => 
+    p.id === id || 
+    p.sku === id || 
+    p.name.replace(/[^a-zA-Z0-9- ]/g, '').replace(/\s+/g, '-').toLowerCase() === id
+  );
   
   if (!product) {
     return (
