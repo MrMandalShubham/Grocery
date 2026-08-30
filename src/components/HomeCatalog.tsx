@@ -69,7 +69,7 @@ export default function HomeCatalog({
           {selectedGroup && selectedGroup.list.length > 0 ? (
             <div className="flex flex-wrap gap-2 md:gap-4">
               {selectedGroup.list.map((product) => (
-                <div key={product.id} className="w-[110px] sm:w-[170px] md:w-[190px] lg:w-[210px]">
+                <div key={product.id} className="w-[115px] sm:w-[170px] md:w-[190px] lg:w-[210px]">
                   <ProductCard product={product} />
                 </div>
               ))}
@@ -101,7 +101,7 @@ export default function HomeCatalog({
                 ) : (
                   <div className="flex gap-2 md:gap-4 overflow-x-auto pb-4 snap-x -mx-4 px-4 md:mx-0 md:px-0" style={{scrollbarWidth: 'none'}}>
                     {group.list.map((product) => (
-                      <div key={product.id} className="snap-start flex-none w-[110px] sm:w-[170px] md:w-[190px] lg:w-[210px]">
+                      <div key={product.id} className="snap-start flex-none w-[120px] sm:w-[170px] md:w-[190px] lg:w-[210px]">
                         <ProductCard product={product} />
                       </div>
                     ))}

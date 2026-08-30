@@ -6,7 +6,6 @@ import Link from "next/link";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { role } = useRole();
-  const { items, addItem, updateQuantity } = useCart();
   
   // B2B Pricing = Cost + 15%
   const b2bPrice = Math.ceil(product.cost * 1.15);
@@ -14,9 +13,6 @@ export default function ProductCard({ product }: { product: Product }) {
   
   const isOutOfStock = product.stock === 0;
   const isLowStock = product.stock > 0 && product.stock <= 5;
-  
-  const cartItem = items.find(i => i.id === product.id);
-  const qtyInCart = cartItem?.quantity || 0;
 
   return (
     <div className={`bg-white border ${isOutOfStock ? 'border-danger/30 opacity-70' : 'border-line'} rounded-2xl p-2.5 md:p-4 flex flex-col gap-2 md:gap-3 relative hover:shadow-md transition`}>
@@ -38,7 +34,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
       </Link>
 
-      {/* Pricing & CTA */}
+      {/* Pricing */}
       <div className="flex items-center justify-between mt-1 md:mt-2">
         <div className="flex flex-col">
           <span className="font-extrabold text-sm md:text-lg">₹{displayPrice}</span>
@@ -46,24 +42,7 @@ export default function ProductCard({ product }: { product: Product }) {
             <span className="text-[10px] md:text-xs text-ink-3 line-through">₹{product.mrp}</span>
           )}
         </div>
-        
-        {qtyInCart > 0 ? (
-          <div className="flex items-center gap-1.5 md:gap-3 bg-green-soft rounded-lg px-1.5 md:px-2 py-1 border border-green-deep/20">
-            <button onClick={() => updateQuantity(product.id, qtyInCart - 1)} className="text-green-deep font-bold px-1 hover:opacity-70 text-xs md:text-sm">-</button>
-            <span className="font-bold text-xs md:text-sm w-3 md:w-4 text-center">{qtyInCart}</span>
-            <button disabled={qtyInCart >= product.stock} onClick={() => updateQuantity(product.id, qtyInCart + 1)} className="text-green-deep font-bold px-1 hover:opacity-70 text-xs md:text-sm">+</button>
-          </div>
-        ) : (
-          <button 
-            disabled={isOutOfStock}
-            onClick={() => addItem(product)}
-            className={`px-3 py-1 md:px-4 md:py-1.5 rounded-full font-bold text-xs md:text-sm transition ${isOutOfStock ? 'bg-line text-ink-3 cursor-not-allowed' : 'bg-green-soft text-green-deep border border-green-deep hover:bg-green-deep hover:text-white'}`}
-          >
-            {isOutOfStock ? 'Sold' : 'ADD'}
-          </button>
-        )}
       </div>
     </div>
   );
 }
-

@@ -75,8 +75,8 @@ export default function CuratedCarousel({ products }: { products: Product[] }) {
             key={product.id} 
             className={`snap-center flex-none transition-all duration-500 ease-out ${
               isCenter 
-                ? 'w-[120px] sm:w-[180px] md:w-[200px] lg:w-[220px] scale-[1.03] shadow-lg ring-4 ring-green-deep z-10 rounded-2xl relative' 
-                : 'w-[110px] sm:w-[170px] md:w-[190px] lg:w-[210px] opacity-80 scale-[0.97]'
+                ? 'w-[130px] sm:w-[180px] md:w-[200px] lg:w-[220px] scale-[1.03] shadow-lg ring-4 ring-green-deep z-10 rounded-2xl relative' 
+                : 'w-[120px] sm:w-[170px] md:w-[190px] lg:w-[210px] opacity-80 scale-[0.97]'
             }`}
           >
             <ProductCard product={product} />
