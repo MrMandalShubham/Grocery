@@ -53,6 +53,14 @@ export default function BottomNav() {
           <span className="text-2xl leading-none">📦</span>
           <span className="text-[10px] font-bold">Orders</span>
         </Link>
+
+        <Link 
+          href="/account" 
+          className={`flex flex-col items-center justify-center w-full h-full gap-1 transition ${pathname.startsWith('/account') ? 'text-green-deep' : 'text-ink-3 hover:text-green-soft'}`}
+        >
+          <span className="text-2xl leading-none">👤</span>
+          <span className="text-[10px] font-bold">Account</span>
+        </Link>
       </nav>
     </div>
   );
