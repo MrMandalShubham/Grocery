@@ -12,6 +12,8 @@ const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
 });
 
+import BottomNav from "@/components/BottomNav";
+
 export const metadata: Metadata = {
   title: "GenG (General Grocery)",
   description: "Your daily groceries, delivered in minutes.",
@@ -27,10 +29,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RoleProvider>
           <CartProvider>
             <Header />
-            <main className="flex-grow max-w-7xl mx-auto w-full px-4 py-8">
+            <main className="flex-grow max-w-7xl mx-auto w-full px-4 pt-8 pb-24 md:pb-8">
               {children}
             </main>
             <Footer />
+            <BottomNav />
             <CartDrawer />
           </CartProvider>
         </RoleProvider>
