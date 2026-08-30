@@ -5,7 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 
 export default function BottomNav() {
   const pathname = usePathname();
-  const { itemCount, setIsCartOpen } = useCart();
+  const { itemCount, isCartOpen, setIsCartOpen } = useCart();
 
   // Don't show bottom nav on checkout or auth pages
   if (pathname === '/checkout' || pathname === '/login' || pathname === '/wholesale-login') {
@@ -17,6 +17,7 @@ export default function BottomNav() {
       <nav className="flex items-center justify-around h-16">
         <Link 
           href="/" 
+          onClick={() => setIsCartOpen(false)}
           className={`flex flex-col items-center justify-center w-full h-full gap-1 transition ${pathname === '/' ? 'text-green-deep' : 'text-ink-3 hover:text-green-soft'}`}
         >
           <span className="text-2xl leading-none">🏠</span>
@@ -25,6 +26,7 @@ export default function BottomNav() {
         
         <Link 
           href="/search" 
+          onClick={() => setIsCartOpen(false)}
           className={`flex flex-col items-center justify-center w-full h-full gap-1 transition ${pathname.startsWith('/search') ? 'text-green-deep' : 'text-ink-3 hover:text-green-soft'}`}
         >
           <span className="text-2xl leading-none">🔍</span>
@@ -32,8 +34,8 @@ export default function BottomNav() {
         </Link>
 
         <button 
-          onClick={() => setIsCartOpen(true)}
-          className="flex flex-col items-center justify-center w-full h-full gap-1 transition text-ink-3 hover:text-green-soft relative"
+          onClick={() => setIsCartOpen(!isCartOpen)}
+          className={`flex flex-col items-center justify-center w-full h-full gap-1 transition ${isCartOpen ? 'text-green-deep' : 'text-ink-3 hover:text-green-soft'} relative`}
         >
           <div className="relative">
             <span className="text-2xl leading-none">🛒</span>
@@ -48,6 +50,7 @@ export default function BottomNav() {
 
         <Link 
           href="/orders" 
+          onClick={() => setIsCartOpen(false)}
           className={`flex flex-col items-center justify-center w-full h-full gap-1 transition ${pathname.startsWith('/orders') ? 'text-green-deep' : 'text-ink-3 hover:text-green-soft'}`}
         >
           <span className="text-2xl leading-none">📦</span>
@@ -56,6 +59,7 @@ export default function BottomNav() {
 
         <Link 
           href="/account" 
+          onClick={() => setIsCartOpen(false)}
           className={`flex flex-col items-center justify-center w-full h-full gap-1 transition ${pathname.startsWith('/account') ? 'text-green-deep' : 'text-ink-3 hover:text-green-soft'}`}
         >
           <span className="text-2xl leading-none">👤</span>
