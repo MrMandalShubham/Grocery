@@ -77,9 +77,11 @@ export default function CheckoutPage() {
 
       if (itemsError) throw itemsError;
 
-      // Simulate a small delay for UI purposes
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+      // 3. Reserve Inventory in the external system
+      const { reserveInventory } = await import("@/services/inventory");
+      const inventoryItems = items.map(item => ({ sku: item.sku, quantity: item.quantity }));
+      await reserveInventory(orderData.id, inventoryItems, "SH1");
+
       // Use the last segment of the UUID as a readable order ID
       setOrderId(`ORD-${orderData.id.split("-")[0].toUpperCase()}`);
       clearCart();

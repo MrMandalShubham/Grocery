@@ -2492,10 +2492,70 @@ const mockProducts: Product[] = [
   }
 ];
 
-export async function getProducts(): Promise<Product[]> {
-  return new Promise((resolve) => setTimeout(() => resolve(mockProducts), 100));
+export async function getProducts(params?: { category?: string; search?: string; location?: string }): Promise<Product[]> {
+  const baseUrl = process.env.NEXT_PUBLIC_INVENTORY_API_URL;
+  if (!baseUrl) {
+    // Fallback to mocks if no API URL is provided
+    let results = [...mockProducts];
+    if (params?.category) results = results.filter(p => p.category === params.category);
+    if (params?.search) {
+      const q = params.search.toLowerCase();
+      results = results.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+    }
+    return results;
+  }
+
+  // Use real API
+  const url = new URL(`${baseUrl}/api/products`);
+  url.searchParams.set("location", params?.location || "SH1");
+  if (params?.category) url.searchParams.set("category", params.category);
+  if (params?.search) url.searchParams.set("search", params.search);
+
+  const res = await fetch(url.toString(), { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch products");
+  return res.json();
 }
 
-export async function getCategories(): Promise<Category[]> {
-  return new Promise((resolve) => setTimeout(() => resolve(mockCategories), 100));
+export async function getProductByIdOrSlug(idOrSlug: string, location: string = "SH1"): Promise<Product | null> {
+  const baseUrl = process.env.NEXT_PUBLIC_INVENTORY_API_URL;
+  if (!baseUrl) {
+    const slugified = (name: string) => name.replace(/[^a-zA-Z0-9- ]/g, '').replace(/\s+/g, '-').toLowerCase();
+    return mockProducts.find(p => p.id === idOrSlug || p.sku === idOrSlug || slugified(p.name) === idOrSlug) || null;
+  }
+
+  const res = await fetch(`${baseUrl}/api/products/${idOrSlug}?location=${location}`, { cache: "no-store" });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error("Failed to fetch product");
+  return res.json();
+}
+
+export async function getCategories(location: string = "SH1"): Promise<Category[]> {
+  const baseUrl = process.env.NEXT_PUBLIC_INVENTORY_API_URL;
+  if (!baseUrl) return mockCategories;
+
+  const res = await fetch(`${baseUrl}/api/categories?location=${location}`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch categories");
+  return res.json();
+}
+
+export async function reserveInventory(orderId: string, items: { sku: string; quantity: number }[], location: string = "SH1"): Promise<void> {
+  const baseUrl = process.env.NEXT_PUBLIC_INVENTORY_API_URL;
+  if (!baseUrl) {
+    console.log("[Mock] Reserving inventory for order:", orderId, items);
+    return;
+  }
+
+  const res = await fetch(`${baseUrl}/api/inventory/reserve`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      order_id: orderId,
+      location,
+      items
+    })
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to reserve inventory. Items may be out of stock.");
+  }
 }

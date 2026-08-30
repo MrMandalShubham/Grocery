@@ -7,16 +7,10 @@ export default async function SearchPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }> 
 }) {
   const params = await searchParams;
-  const q = typeof params.q === 'string' ? params.q.toLowerCase() : '';
+  const q = typeof params.q === 'string' ? params.q : '';
   
-  const products = await getProducts();
-  
-  const results = q 
-    ? products.filter(p => 
-        p.name.toLowerCase().includes(q) || 
-        p.category.toLowerCase().includes(q)
-      )
-    : [];
+  // Use the API search capability directly
+  const results = q ? await getProducts({ search: q }) : [];
 
   return (
     <div className="max-w-7xl mx-auto py-8 flex flex-col gap-8 px-4">
