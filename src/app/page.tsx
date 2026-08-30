@@ -1,6 +1,8 @@
 import { getProducts, getCategories } from "@/services/inventory";
 import HomeCatalog from "@/components/HomeCatalog";
 
+import HeroAnimation from "@/components/HeroAnimation";
+
 export default async function Home() {
   const products = await getProducts();
   const categories = await getCategories();
@@ -47,11 +49,8 @@ export default async function Home() {
             Shop now →
           </button>
         </div>
-        {/* Abstract Art matching original style */}
-        <div className="hidden md:flex relative w-48 h-48 items-center justify-center">
-          <div className="absolute inset-0 bg-green/10 rounded-full blur-2xl"></div>
-          <span className="text-[120px] drop-shadow-xl z-10 animate-bounce" style={{animationDuration: '3s'}}>🥑</span>
-        </div>
+        {/* Dynamic Abstract Art matching original style */}
+        <HeroAnimation />
       </section>
 
       {/* Offers Strip */}
