@@ -37,10 +37,12 @@ export default function CartDrawer() {
             </div>
           ) : (
             items.map((item) => {
-              const price = role === "B2B" ? Math.ceil(item.cost * 1.15) : item.retailPrice;
+              const price = role === "B2B" ? (item.wholesalePrice ?? item.retailPrice ?? 0) : (item.retailPrice ?? 0);
               return (
                 <div key={item.id} className="bg-white p-3 rounded-xl border border-line flex gap-4 items-center shadow-sm">
-                  <div className="w-16 h-16 bg-green-mist rounded-lg flex-shrink-0" />
+                  <div className="w-16 h-16 bg-green-mist rounded-lg flex-shrink-0 overflow-hidden">
+                    {item.image_url && <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />}
+                  </div>
                   <div className="flex-1">
                     <h4 className="font-semibold text-sm leading-tight">{item.name}</h4>
                     <div className="text-xs text-ink-3 mb-2">{item.unit}</div>
@@ -57,7 +59,7 @@ export default function CartDrawer() {
                     <button 
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       className="text-green-deep font-bold px-1 hover:opacity-70"
-                      disabled={item.quantity >= item.stock}
+                      disabled={item.stock !== null && item.quantity >= item.stock}
                     >+</button>
                   </div>
                 </div>

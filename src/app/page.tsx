@@ -13,8 +13,8 @@ export default async function Home() {
   
   // Generate "Biggest Discounts" (Sort by % off)
   const discountList = [...products].sort((a, b) => {
-    const aOff = (a.mrp - a.retailPrice) / a.mrp;
-    const bOff = (b.mrp - b.retailPrice) / b.mrp;
+    const aOff = (a.mrp && a.retailPrice && a.mrp > 0) ? (a.mrp - a.retailPrice) / a.mrp : 0;
+    const bOff = (b.mrp && b.retailPrice && b.mrp > 0) ? (b.mrp - b.retailPrice) / b.mrp : 0;
     return bOff - aOff;
   }).slice(0, 15);
 

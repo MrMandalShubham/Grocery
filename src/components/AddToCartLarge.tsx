@@ -17,7 +17,7 @@ export default function AddToCartLarge({ product }: { product: Product }) {
         <div className="flex items-center justify-between bg-green-soft rounded-xl px-2 py-3 border border-green-deep/20 w-[140px]">
           <button onClick={() => updateQuantity(product.id, qtyInCart - 1)} className="text-green-deep font-bold text-2xl hover:opacity-70 px-3">-</button>
           <span className="font-bold text-xl">{qtyInCart}</span>
-          <button disabled={qtyInCart >= product.stock} onClick={() => updateQuantity(product.id, qtyInCart + 1)} className="text-green-deep font-bold text-2xl hover:opacity-70 px-3">+</button>
+          <button disabled={product.stock !== null && qtyInCart >= product.stock} onClick={() => updateQuantity(product.id, qtyInCart + 1)} className="text-green-deep font-bold text-2xl hover:opacity-70 px-3">+</button>
         </div>
         <button 
           onClick={() => router.push('/checkout')}

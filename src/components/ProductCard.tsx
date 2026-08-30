@@ -6,13 +6,17 @@ import Link from "next/link";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { role } = useRole();
+  const { addItem } = useCart();
   
-  // B2B Pricing = Cost + 15%
-  const b2bPrice = Math.ceil(product.cost * 1.15);
-  const displayPrice = role === "B2B" ? b2bPrice : product.retailPrice;
+  // Calculate price based on role
+  const b2bPrice = product.wholesalePrice ?? product.retailPrice ?? 0;
+  const retailPrice = product.retailPrice ?? 0;
+  const price = role === "B2B" ? b2bPrice : retailPrice;
+  const mrp = product.mrp ?? 0;
+  const discount = mrp > price ? Math.round(((mrp - price) / mrp) * 100) : 0;
   
   const isOutOfStock = product.stock === 0;
-  const isLowStock = product.stock > 0 && product.stock <= 5;
+  const isLowStock = product.stock !== null && product.stock > 0 && product.stock <= 5;
 
   return (
     <div className={`bg-white border ${isOutOfStock ? 'border-danger/30 opacity-70' : 'border-line'} rounded-2xl p-2.5 md:p-4 flex flex-col gap-2 md:gap-3 relative hover:shadow-md transition`}>
@@ -24,8 +28,12 @@ export default function ProductCard({ product }: { product: Product }) {
 
       <Link href={`/product/${product.name.replace(/[^a-zA-Z0-9- ]/g, '').replace(/\s+/g, '-').toLowerCase()}`} className="flex flex-col flex-grow cursor-pointer group">
         {/* Image Placeholder */}
-        <div className="w-full h-20 md:h-32 bg-green-mist rounded-xl mt-4 flex items-center justify-center text-green-soft group-hover:bg-[#d4eadb] transition">
-          <span className="text-3xl md:text-4xl">🛒</span>
+        <div className="w-full h-20 md:h-32 bg-green-mist rounded-xl mt-4 flex items-center justify-center text-green-soft group-hover:bg-[#d4eadb] transition overflow-hidden">
+          {product.image_url ? (
+            <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
+          ) : (
+            <span className="text-3xl md:text-4xl">🛒</span>
+          )}
         </div>
 
         {/* Details (Simplified) */}
@@ -37,9 +45,9 @@ export default function ProductCard({ product }: { product: Product }) {
       {/* Pricing */}
       <div className="flex items-center justify-between mt-1 md:mt-2">
         <div className="flex flex-col">
-          <span className="font-extrabold text-sm md:text-lg">₹{displayPrice}</span>
-          {role === "B2C" && product.mrp > displayPrice && (
-            <span className="text-[10px] md:text-xs text-ink-3 line-through">₹{product.mrp}</span>
+          <span className="font-extrabold text-sm md:text-lg">₹{price}</span>
+          {role === "B2C" && mrp > price && (
+            <span className="text-[10px] md:text-xs text-ink-3 line-through">₹{mrp}</span>
           )}
         </div>
       </div>

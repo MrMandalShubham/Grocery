@@ -67,7 +67,7 @@ export default function CheckoutPage() {
         external_product_id: item.id,
         sku: item.sku,
         name: item.name,
-        price_at_purchase: role === "B2B" ? Math.ceil(item.cost * 1.15) : item.retailPrice,
+        price_at_purchase: role === "B2B" ? (item.wholesalePrice ?? item.retailPrice ?? 0) : (item.retailPrice ?? 0),
         quantity: item.quantity
       }));
 
@@ -77,10 +77,10 @@ export default function CheckoutPage() {
 
       if (itemsError) throw itemsError;
 
-      // 3. Reserve Inventory in the external system
-      const { reserveInventory } = await import("@/services/inventory");
+      // 3. Reserve Inventory in the external system securely via Server Action
+      const { reserveOrderInventory } = await import("@/app/actions");
       const inventoryItems = items.map(item => ({ sku: item.sku, quantity: item.quantity }));
-      await reserveInventory(orderData.id, inventoryItems, "SH1");
+      await reserveOrderInventory(orderData.id, inventoryItems);
 
       // Use the last segment of the UUID as a readable order ID
       setOrderId(`ORD-${orderData.id.split("-")[0].toUpperCase()}`);
@@ -143,7 +143,7 @@ export default function CheckoutPage() {
               <div key={item.id} className="flex justify-between text-sm">
                 <span className="text-ink-2">{item.quantity}x {item.name}</span>
                 <span className="font-bold">
-                  ₹{item.quantity * (role === "B2B" ? Math.ceil(item.cost * 1.15) : item.retailPrice)}
+                  ₹{item.quantity * (role === "B2B" ? (item.wholesalePrice ?? item.retailPrice ?? 0) : (item.retailPrice ?? 0))}
                 </span>
               </div>
             ))}

@@ -30,7 +30,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
-        if (existing.quantity >= product.stock) return prev; // Clamp to stock
+        if (product.stock !== null && existing.quantity >= product.stock) return prev; // Clamp to stock
         return prev.map((item) =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
@@ -51,7 +51,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) =>
       prev.map((item) => {
         if (item.id === productId) {
-          return { ...item, quantity: Math.min(quantity, item.stock) };
+          return { ...item, quantity: item.stock !== null ? Math.min(quantity, item.stock) : quantity };
         }
         return item;
       })
@@ -62,9 +62,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  const cartTotal = items.reduce((sum, item) => {
-    const price = role === "B2B" ? Math.ceil(item.cost * 1.15) : item.retailPrice;
-    return sum + price * item.quantity;
+  const cartTotal = items.reduce((total, item) => {
+    const price = role === "B2B" ? (item.wholesalePrice ?? item.retailPrice ?? 0) : (item.retailPrice ?? 0);
+    return total + price * item.quantity;
   }, 0);
 
   return (

@@ -17,7 +17,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   }
 
   // Get some related products (same category, excluding current)
-  const relatedProducts = products
+  const allProducts = await getProducts(product.category ? { category: product.category } : {});
+  const relatedProducts = allProducts
     .filter(p => p.category === product.category && p.id !== product.id)
     .slice(0, 5);
 
@@ -27,9 +28,13 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
       {/* Product Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {/* Left: Huge Image */}
-        <div className="bg-green-mist rounded-3xl h-[400px] md:h-[500px] flex items-center justify-center text-green-soft relative">
-          <span className="text-[120px] md:text-[180px]">🛒</span>
-          {product.stock > 0 && product.stock <= 5 && (
+        <div className="bg-green-mist rounded-3xl h-[400px] md:h-[500px] flex items-center justify-center text-green-soft relative overflow-hidden">
+          {product.image_url ? (
+            <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-[120px] md:text-[180px]">🛒</span>
+          )}
+          {product.stock !== null && product.stock > 0 && product.stock <= 5 && (
             <span className="absolute top-6 left-6 bg-yellow text-yellow-ink text-xs font-bold px-3 py-1 rounded-sm shadow-sm">
               Hurry, only {product.stock} left!
             </span>
@@ -40,7 +45,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         <div className="flex flex-col gap-6 justify-center">
           <div>
             <span className="text-sm text-ink-3 font-semibold uppercase tracking-wider bg-line/30 px-2 py-1 rounded-md">
-              {product.category}
+              {product.category_name || product.category}
             </span>
             <h1 className="text-3xl md:text-4xl font-extrabold text-ink mt-3 leading-tight">
               {product.name}
@@ -51,11 +56,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           <div className="flex flex-col gap-1 border-y border-line py-6 my-2">
             <div className="flex items-end gap-3">
               <span className="text-4xl font-extrabold text-ink">₹{product.retailPrice}</span>
-              {product.mrp > product.retailPrice && (
+              {product.mrp && product.retailPrice && product.mrp > product.retailPrice && (
                 <span className="text-xl text-ink-3 line-through mb-1">₹{product.mrp}</span>
               )}
             </div>
-            {product.mrp > product.retailPrice && (
+            {product.mrp && product.retailPrice && product.mrp > product.retailPrice && (
               <span className="text-green font-bold text-sm">
                 You save ₹{product.mrp - product.retailPrice} ({Math.round(((product.mrp - product.retailPrice) / product.mrp) * 100)}% OFF)
               </span>
