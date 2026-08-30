@@ -14,7 +14,10 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-green-deep text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link href="/" className="font-bold text-2xl tracking-tight hover:opacity-80 transition">Grocery.</Link>
+          <Link href="/" className="font-bold text-xl md:text-2xl tracking-tight hover:opacity-80 transition flex items-center gap-2">
+            <img src="/logo.png" alt="GenG Logo" className="w-10 h-10 object-contain bg-white rounded-full shadow-sm" />
+            <span className="hidden sm:inline">GenG</span>
+          </Link>
         </div>
         <div className="flex gap-4 items-center">
           <form 

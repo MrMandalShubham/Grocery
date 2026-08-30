@@ -13,8 +13,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Grocery Platform",
-  description: "B2B2C quick-commerce platform",
+  title: "GenG (General Grocery)",
+  description: "Your daily groceries, delivered in minutes.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
