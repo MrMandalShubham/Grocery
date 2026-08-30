@@ -7,9 +7,16 @@ export default function HeroAnimation() {
   const [icon, setIcon] = useState("🥑"); 
 
   useEffect(() => {
-    // Randomize on client mount to avoid SSR hydration mismatch
-    const randomIcon = ICONS[Math.floor(Math.random() * ICONS.length)];
-    setIcon(randomIcon);
+    // Start interval to change icon every 3rd bounce (9 seconds)
+    const interval = setInterval(() => {
+      setIcon((currentIcon) => {
+        // Pick a random icon that is different from the current one
+        const availableIcons = ICONS.filter(i => i !== currentIcon);
+        return availableIcons[Math.floor(Math.random() * availableIcons.length)];
+      });
+    }, 9000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
