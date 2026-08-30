@@ -15,7 +15,7 @@ export default function CartDrawer() {
         className="fixed inset-0 bg-ink/50 z-[60] backdrop-blur-sm"
         onClick={() => setIsCartOpen(false)}
       />
-      <div className="fixed top-0 right-0 h-full w-full max-w-md bg-cream z-[70] shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
+      <div className="fixed top-0 right-0 h-full w-full max-w-md bg-cream z-[70] shadow-2xl flex flex-col animate-in slide-in-from-right duration-300 pb-20 md:pb-0">
         
         {/* Header */}
         <div className="flex items-center justify-between p-4 bg-white border-b border-line">
