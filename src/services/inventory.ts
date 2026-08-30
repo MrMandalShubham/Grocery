@@ -1,8 +1,4 @@
-const BASE = process.env.INVENTORY_API_URL!;
-const KEY = process.env.INVENTORY_API_KEY!;
-export const LOCATION = process.env.INVENTORY_LOCATION!;
-
-if (!BASE || !KEY) throw new Error("Inventory API is not configured");
+export const LOCATION = process.env.INVENTORY_LOCATION || "SH1";
 
 export type Product = {
   id: string; sku: string; slug: string; name: string;
@@ -17,6 +13,14 @@ export type Category = {
 };
 
 async function call<T>(path: string, init?: RequestInit): Promise<T> {
+  const BASE = process.env.INVENTORY_API_URL;
+  const KEY = process.env.INVENTORY_API_KEY;
+  if (!BASE || !KEY) {
+    console.warn("Inventory API is not configured. Missing INVENTORY_API_URL or INVENTORY_API_KEY.");
+    // Return empty array/object gracefully during build if env vars are missing
+    return [] as unknown as T;
+  }
+
   const res = await fetch(BASE + path, {
     ...init,
     headers: {
