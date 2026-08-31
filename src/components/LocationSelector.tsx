@@ -6,6 +6,9 @@ import { useCart } from "@/contexts/CartContext";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+import { STORE_LOCATIONS, MAX_DELIVERY_RADIUS_KM } from "@/config/stores";
+import { calculateDistanceKM } from "@/lib/distance";
+
 export default function LocationSelector({ 
   currentLocation, 
   locations 
@@ -14,6 +17,7 @@ export default function LocationSelector({
   locations: Location[] 
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
   const { clearCart, items } = useCart();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -34,7 +38,6 @@ export default function LocationSelector({
     setIsOpen(false);
     if (locId === currentLocation) return;
     
-    // Clear cart if switching locations to avoid stock issues
     if (items.length > 0) {
       const confirmClear = window.confirm("Changing your location will clear your current cart. Continue?");
       if (!confirmClear) return;
@@ -43,6 +46,54 @@ export default function LocationSelector({
     
     await setLocationCookie(locId);
     router.refresh();
+  };
+
+  const handleAutoLocate = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+    
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        setIsLocating(false);
+        setIsOpen(false);
+        
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+        
+        // Find closest store
+        let closestStoreId = null;
+        let minDistance = Infinity;
+        
+        for (const [storeId, coords] of Object.entries(STORE_LOCATIONS)) {
+          // Only check stores that exist in backend locations list
+          if (locations.find(l => l.id === storeId)) {
+            const distance = calculateDistanceKM(userLat, userLng, coords.lat, coords.lng);
+            if (distance < minDistance) {
+              minDistance = distance;
+              closestStoreId = storeId;
+            }
+          }
+        }
+        
+        if (closestStoreId && minDistance <= MAX_DELIVERY_RADIUS_KM) {
+          if (closestStoreId !== currentLocation && items.length > 0) {
+            clearCart(); // Auto clear cart if they were using a different location manually before
+          }
+          await setLocationCookie(closestStoreId);
+          router.refresh();
+        } else {
+          // Out of service area
+          router.push(`/out-of-service?lat=${userLat}&lng=${userLng}`);
+        }
+      },
+      (error) => {
+        setIsLocating(false);
+        alert("Unable to retrieve your location. Please select manually.");
+      }
+    );
   };
 
   if (!locations || locations.length === 0) return null;
@@ -64,10 +115,21 @@ export default function LocationSelector({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-line overflow-hidden z-50 animate-in fade-in slide-in-from-top-2">
-          <div className="p-3 bg-green-soft border-b border-line">
-            <h3 className="font-bold text-green-deep text-sm">Choose Store</h3>
-            <p className="text-xs text-green-ink opacity-80 leading-tight mt-0.5">Showing products in stock at this location</p>
+        <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-line overflow-hidden z-50 animate-in fade-in slide-in-from-top-2">
+          <div className="p-3 bg-green-soft border-b border-line flex flex-col gap-2">
+            <div>
+              <h3 className="font-bold text-green-deep text-sm">Choose Store</h3>
+              <p className="text-xs text-green-ink opacity-80 leading-tight mt-0.5">Showing products in stock at this location</p>
+            </div>
+            
+            <button 
+              onClick={handleAutoLocate}
+              disabled={isLocating}
+              className="w-full flex items-center justify-center gap-2 bg-green-deep text-white text-xs font-bold py-2 rounded-lg hover:bg-green-ink transition disabled:opacity-50"
+            >
+              <span>{isLocating ? '⏳' : '📍'}</span> 
+              {isLocating ? 'Locating...' : 'Use current location'}
+            </button>
           </div>
           <div className="max-h-60 overflow-y-auto p-1">
             {locations.map(loc => (
