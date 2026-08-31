@@ -78,7 +78,6 @@ export default function LocationSelector({
       className={`flex items-center justify-center w-9 h-9 md:w-11 md:h-11 text-white rounded-xl transition disabled:opacity-50 ${
         !activeLoc && !isLocating ? 'bg-green-deep ring-2 ring-yellow animate-pulse shadow-[0_0_15px_rgba(255,215,0,0.6)]' : 'bg-green-ink/30 hover:bg-green-ink/50'
       }`}
-      title={activeLoc ? activeLoc.name : "Locate Me"}
     >
       {isLocating ? (
         <svg className="animate-spin w-5 h-5 md:w-6 md:h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
