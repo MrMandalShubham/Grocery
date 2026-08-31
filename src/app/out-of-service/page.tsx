@@ -68,10 +68,6 @@ function OutOfServiceContent() {
           </button>
         </div>
       </div>
-
-      <Link href="/" className="text-sm font-semibold text-ink-3 hover:text-green-deep transition underline">
-        Manually select a different location
-      </Link>
     </div>
   );
 }
