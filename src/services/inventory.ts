@@ -38,7 +38,8 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
       "Content-Type": "application/json",
       ...init?.headers,
     },
-    cache: "no-store",
+    cache: init?.method === "POST" ? "no-store" : undefined,
+    next: init?.method !== "POST" ? (init?.next ?? { revalidate: 5 }) : undefined,
   });
 
   const body = await res.json().catch(() => null);
