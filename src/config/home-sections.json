@@ -1,0 +1,13 @@
+{
+  "trending": [
+    "Aloo Bhujia 200g",
+    "Farm Eggs 6 pcs",
+    "Basmati Rice 5kg",
+    "Full Cream Milk 500ml",
+    "Bananas"
+  ],
+  "discounts": {
+    "mode": "automatic",
+    "manual_items": []
+  }
+}

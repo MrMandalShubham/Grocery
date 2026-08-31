@@ -3,20 +3,40 @@ import HomeCatalog from "@/components/HomeCatalog";
 
 import HeroAnimation from "@/components/HeroAnimation";
 
+import homeConfig from "@/config/home-sections.json";
+
 export default async function Home() {
   const products = await getProducts();
   const categories = await getCategories();
 
-  // Generate "Trending Near You" (15 random products)
-  // We use a simple seeded random or just take a slice to ensure it's stable for SSR
-  const trendingList = [...products].sort((a, b) => (Number(a.id) * 7 % 10) - (Number(b.id) * 7 % 10)).slice(0, 15);
+  // Generate "Trending Near You" based on config
+  const trendingMatches = products.filter(p => 
+    homeConfig.trending.includes(p.sku) || 
+    homeConfig.trending.includes(p.slug) || 
+    homeConfig.trending.includes(p.name)
+  );
+  // If config is empty or didn't match anything, fallback to deterministic random
+  const trendingList = trendingMatches.length > 0 
+    ? trendingMatches 
+    : [...products].sort((a, b) => (Number(a.id) * 7 % 10) - (Number(b.id) * 7 % 10)).slice(0, 15);
   
-  // Generate "Biggest Discounts" (Sort by % off)
-  const discountList = [...products].sort((a, b) => {
-    const aOff = (a.mrp && a.retailPrice && a.mrp > 0) ? (a.mrp - a.retailPrice) / a.mrp : 0;
-    const bOff = (b.mrp && b.retailPrice && b.mrp > 0) ? (b.mrp - b.retailPrice) / b.mrp : 0;
-    return bOff - aOff;
-  }).slice(0, 15);
+  // Generate "Biggest Discounts"
+  let discountList = [];
+  if (homeConfig.discounts.mode === "manual") {
+    const manualItems = homeConfig.discounts.manual_items as string[];
+    discountList = products.filter(p => 
+      manualItems.includes(p.sku) || 
+      manualItems.includes(p.slug) || 
+      manualItems.includes(p.name)
+    );
+  } else {
+    // Sort by % off
+    discountList = [...products].sort((a, b) => {
+      const aOff = (a.mrp && a.retailPrice && a.mrp > 0) ? (a.mrp - a.retailPrice) / a.mrp : 0;
+      const bOff = (b.mrp && b.retailPrice && b.mrp > 0) ? (b.mrp - b.retailPrice) / b.mrp : 0;
+      return bOff - aOff;
+    }).slice(0, 15);
+  }
 
   // Group normal products by category
   const categorizedProducts = categories.map(cat => ({
