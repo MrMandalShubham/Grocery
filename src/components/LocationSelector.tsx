@@ -72,13 +72,20 @@ export default function LocationSelector({
   if (!locations || locations.length === 0) return null;
 
   return (
-    <button 
-      onClick={handleAutoLocate}
-      disabled={isLocating}
-      className={`flex items-center justify-center w-9 h-9 md:w-11 md:h-11 text-white rounded-xl transition disabled:opacity-50 ${
-        !activeLoc && !isLocating ? 'bg-green-deep ring-2 ring-yellow animate-pulse shadow-[0_0_15px_rgba(255,215,0,0.6)]' : 'bg-green-ink/30 hover:bg-green-ink/50'
-      }`}
-    >
+    <div className="relative flex items-center justify-center w-9 h-9 md:w-11 md:h-11">
+      {/* Expanding Ripple Animation */}
+      {!activeLoc && !isLocating && (
+        <span className="absolute inset-0 rounded-xl bg-yellow animate-ping opacity-75"></span>
+      )}
+      
+      {/* Actual Button */}
+      <button 
+        onClick={handleAutoLocate}
+        disabled={isLocating}
+        className={`relative flex items-center justify-center w-full h-full text-white rounded-xl transition disabled:opacity-50 z-10 ${
+          !activeLoc && !isLocating ? 'bg-green-deep shadow-md' : 'bg-green-ink/30 hover:bg-green-ink/50'
+        }`}
+      >
       {isLocating ? (
         <svg className="animate-spin w-5 h-5 md:w-6 md:h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -91,5 +98,6 @@ export default function LocationSelector({
         </svg>
       )}
     </button>
+    </div>
   );
 }
