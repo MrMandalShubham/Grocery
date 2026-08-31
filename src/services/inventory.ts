@@ -1,4 +1,10 @@
-export const LOCATION = process.env.INVENTORY_LOCATION || "SH1";
+import { cookies } from "next/headers";
+
+export async function getCurrentLocation() {
+  const cookieStore = await cookies();
+  const loc = cookieStore.get("inventory_location")?.value;
+  return loc || process.env.INVENTORY_LOCATION || "SH1";
+}
 
 export type Product = {
   id: string; sku: string; slug: string; name: string;
@@ -10,6 +16,10 @@ export type Product = {
 
 export type Category = {
   id: string; name: string; icon: string; product_count: number;
+};
+
+export type Location = {
+  id: string; uuid: string; name: string; type: string; products_in_stock: number;
 };
 
 async function call<T>(path: string, init?: RequestInit): Promise<T> {
@@ -41,13 +51,20 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
   return body as T;
 }
 
-export const getProducts = (params: Record<string, string> = {}) =>
-  call<Product[]>(
-    "/api/products?" + new URLSearchParams({ location: LOCATION, ...params }));
+export const getLocations = async () => 
+  call<Location[]>("/api/locations").catch(() => []);
 
-export const getProductByIdOrSlug = (slugOrSku: string) =>
-  call<Product & { images: any[]; available_elsewhere: any[]; category_name?: string }>(
-    `/api/products/${encodeURIComponent(slugOrSku)}?location=${LOCATION}`);
+export const getProducts = async (params: Record<string, string> = {}) => {
+  const loc = await getCurrentLocation();
+  return call<Product[]>("/api/products?" + new URLSearchParams({ location: loc, ...params }));
+};
+
+export const getProductByIdOrSlug = async (slugOrSku: string) => {
+  const loc = await getCurrentLocation();
+  return call<Product & { images: any[]; available_elsewhere: any[]; category_name?: string }>(
+    `/api/products/${encodeURIComponent(slugOrSku)}?location=${loc}`
+  );
+};
 
 export const ALL_CATEGORIES: Category[] = [
   { id: "fv", name: "Fruits & Veggies", icon: "🥬", product_count: 0 },
@@ -63,7 +80,8 @@ export const ALL_CATEGORIES: Category[] = [
 ];
 
 export const getCategories = async () => {
-  const apiCategories = await call<Category[]>(`/api/categories?location=${LOCATION}`).catch(() => []);
+  const loc = await getCurrentLocation();
+  const apiCategories = await call<Category[]>(`/api/categories?location=${loc}`).catch(() => []);
   return ALL_CATEGORIES.map(staticCat => {
     const apiMatch = apiCategories.find(c => c.id === staticCat.id);
     return {
@@ -73,11 +91,13 @@ export const getCategories = async () => {
   });
 };
 
-export const reserveInventory = (orderId: string, items: { sku: string; quantity: number }[]) =>
-  call<any>("/api/inventory/reserve", {
+export const reserveInventory = async (orderId: string, items: { sku: string; quantity: number }[]) => {
+  const loc = await getCurrentLocation();
+  return call<any>("/api/inventory/reserve", {
     method: "POST",
-    body: JSON.stringify({ order_id: orderId, location: LOCATION, items }),
+    body: JSON.stringify({ order_id: orderId, location: loc, items }),
   });
+};
 
 export const commitInventory = (orderId: string) =>
   call<any>("/api/inventory/commit", {

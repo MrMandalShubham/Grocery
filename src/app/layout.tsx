@@ -13,13 +13,17 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 import BottomNav from "@/components/BottomNav";
+import { getLocations, getCurrentLocation } from "@/services/inventory";
 
 export const metadata: Metadata = {
   title: "GenG (General Grocery)",
   description: "Your daily groceries, delivered in minutes.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locations = await getLocations();
+  const currentLocation = await getCurrentLocation();
+
   return (
     <html
       lang="en"
@@ -28,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col bg-cream text-ink font-sans">
         <RoleProvider>
           <CartProvider>
-            <Header />
+            <Header currentLocation={currentLocation} locations={locations} />
             <main className="flex-grow max-w-7xl mx-auto w-full px-4 pt-8 pb-24 md:pb-8">
               {children}
             </main>

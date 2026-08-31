@@ -5,7 +5,16 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function Header() {
+import { Location } from "@/services/inventory";
+import LocationSelector from "./LocationSelector";
+
+export default function Header({ 
+  currentLocation, 
+  locations 
+}: { 
+  currentLocation?: string, 
+  locations?: Location[] 
+}) {
   const { itemCount, setIsCartOpen } = useCart();
   const { user } = useRole();
   const router = useRouter();
@@ -13,11 +22,15 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-green-deep text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
           <Link href="/" className="font-bold text-xl md:text-2xl tracking-tight hover:opacity-80 transition flex items-center gap-2">
-            <img src="/logo.png" alt="GenG Logo" className="w-10 h-10 object-contain bg-white rounded-full shadow-sm" />
-            <span className="hidden sm:inline">GenG</span>
+            <img src="/logo.png" alt="GenG Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain bg-white rounded-full shadow-sm" />
+            <span className="hidden lg:inline">GenG</span>
           </Link>
+          
+          {currentLocation && locations && (
+            <LocationSelector currentLocation={currentLocation} locations={locations} />
+          )}
         </div>
         <div className="flex gap-4 items-center">
           <form 
