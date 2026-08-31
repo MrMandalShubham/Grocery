@@ -32,7 +32,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="min-h-full flex flex-col bg-cream text-ink font-sans">
         <RoleProvider>
           <CartProvider>
-            <Header currentLocation={currentLocation} locations={locations} />
+            <Header currentLocation={currentLocation || ""} locations={locations} />
             <main className="flex-grow max-w-7xl mx-auto w-full px-4 pt-8 pb-24 md:pb-8">
               {children}
             </main>

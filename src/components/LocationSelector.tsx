@@ -75,15 +75,12 @@ export default function LocationSelector({
     <button 
       onClick={handleAutoLocate}
       disabled={isLocating}
-      className="flex items-center gap-1 md:gap-2 text-white bg-green-ink/30 hover:bg-green-ink/50 px-2 py-1 md:px-3 md:py-1.5 rounded-xl transition text-xs md:text-sm font-semibold disabled:opacity-50"
+      className={`flex items-center justify-center w-8 h-8 md:w-10 md:h-10 text-white rounded-xl transition font-semibold disabled:opacity-50 ${
+        !activeLoc && !isLocating ? 'bg-green-deep ring-2 ring-yellow animate-pulse shadow-[0_0_15px_rgba(255,215,0,0.6)]' : 'bg-green-ink/30 hover:bg-green-ink/50'
+      }`}
+      title={activeLoc ? activeLoc.name : "Locate Me"}
     >
-      <span className="text-lg">{isLocating ? '⏳' : '📍'}</span>
-      <span className="hidden sm:block truncate max-w-[120px] lg:max-w-[180px]">
-        {isLocating ? "Locating..." : (activeLoc ? activeLoc.name : "Locate Me")}
-      </span>
-      <span className="sm:hidden truncate max-w-[80px]">
-        {isLocating ? "Locating..." : (activeLoc ? activeLoc.id : "Locate Me")}
-      </span>
+      <span className="text-xl md:text-2xl">{isLocating ? '⏳' : '📍'}</span>
     </button>
   );
 }

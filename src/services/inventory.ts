@@ -1,9 +1,9 @@
 import { cookies } from "next/headers";
 
-export async function getCurrentLocation() {
+export async function getCurrentLocation(): Promise<string | null> {
   const cookieStore = await cookies();
   const loc = cookieStore.get("inventory_location")?.value;
-  return loc || process.env.INVENTORY_LOCATION || "SH1";
+  return loc || null;
 }
 
 export type Product = {
@@ -57,14 +57,26 @@ export const getLocations = async () =>
 
 export const getProducts = async (params: Record<string, string> = {}) => {
   const loc = await getCurrentLocation();
-  return call<Product[]>("/api/products?" + new URLSearchParams({ location: loc, ...params }));
+  const searchParams = new URLSearchParams(params);
+  if (loc) searchParams.append("location", loc);
+  const query = searchParams.toString() ? "?" + searchParams.toString() : "";
+  const products = await call<Product[]>("/api/products" + query);
+  if (!loc) {
+    return products.map(p => ({ ...p, stock: null }));
+  }
+  return products;
 };
 
 export const getProductByIdOrSlug = async (slugOrSku: string) => {
   const loc = await getCurrentLocation();
-  return call<Product & { images: any[]; available_elsewhere: any[]; category_name?: string }>(
-    `/api/products/${encodeURIComponent(slugOrSku)}?location=${loc}`
+  const query = loc ? `?location=${loc}` : "";
+  const product = await call<Product & { images: any[]; available_elsewhere: any[]; category_name?: string }>(
+    `/api/products/${encodeURIComponent(slugOrSku)}${query}`
   );
+  if (!loc && product) {
+    product.stock = null;
+  }
+  return product;
 };
 
 export const ALL_CATEGORIES: Category[] = [
@@ -82,7 +94,8 @@ export const ALL_CATEGORIES: Category[] = [
 
 export const getCategories = async () => {
   const loc = await getCurrentLocation();
-  const apiCategories = await call<Category[]>(`/api/categories?location=${loc}`).catch(() => []);
+  const query = loc ? `?location=${loc}` : "";
+  const apiCategories = await call<Category[]>(`/api/categories${query}`).catch(() => []);
   return ALL_CATEGORIES.map(staticCat => {
     const apiMatch = apiCategories.find(c => c.id === staticCat.id);
     return {
