@@ -75,12 +75,22 @@ export default function LocationSelector({
     <button 
       onClick={handleAutoLocate}
       disabled={isLocating}
-      className={`flex items-center justify-center w-8 h-8 md:w-10 md:h-10 text-white rounded-xl transition font-semibold disabled:opacity-50 ${
+      className={`flex items-center justify-center w-9 h-9 md:w-11 md:h-11 text-white rounded-xl transition disabled:opacity-50 ${
         !activeLoc && !isLocating ? 'bg-green-deep ring-2 ring-yellow animate-pulse shadow-[0_0_15px_rgba(255,215,0,0.6)]' : 'bg-green-ink/30 hover:bg-green-ink/50'
       }`}
       title={activeLoc ? activeLoc.name : "Locate Me"}
     >
-      <span className="text-xl md:text-2xl">{isLocating ? '⏳' : '📍'}</span>
+      {isLocating ? (
+        <svg className="animate-spin w-5 h-5 md:w-6 md:h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      ) : (
+        <svg className="w-5 h-5 md:w-6 md:h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      )}
     </button>
   );
 }
