@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { setLocationCookie } from "@/app/actions";
+import { setDeliveryLocation } from "@/app/actions";
 import { useCart } from "@/contexts/CartContext";
 import { useRouter } from "next/navigation";
 import { Location } from "@/services/inventory";
@@ -48,7 +48,10 @@ export default function LocationSelector({
       if (closestStoreId !== currentLocation && items.length > 0) {
         clearCart(); 
       }
-      await setLocationCookie(closestStoreId);
+      // Keep the customer's own pin, not just the shop it resolved to.
+      // These two numbers are the only geocode in the system, and a
+      // rider cannot navigate to an address without them.
+      await setDeliveryLocation(closestStoreId, lat, lng);
       setIsModalOpen(false);
       router.refresh();
     } else {

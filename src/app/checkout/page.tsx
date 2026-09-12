@@ -1,14 +1,55 @@
 "use client";
 import { useCart } from "@/contexts/CartContext";
 import { useRole } from "@/contexts/RoleContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import type { DeliveryContext } from "@/app/actions";
+
+type Form = {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  line1: string;
+  line2: string;
+  city: string;
+  pincode: string;
+  instructions: string;
+};
+
+const EMPTY: Form = {
+  firstName: "", lastName: "", phone: "",
+  line1: "", line2: "", city: "", pincode: "", instructions: "",
+};
 
 export default function CheckoutPage() {
   const { items, cartTotal, clearCart } = useCart();
   const { role, user } = useRole();
   const [orderStatus, setOrderStatus] = useState<"idle" | "processing" | "success">("idle");
   const [orderId, setOrderId] = useState<string | null>(null);
+
+  const [form, setForm] = useState<Form>(EMPTY);
+  const [errors, setErrors] = useState<string[]>([]);
+
+  // Where this order is going, and which shop it comes from. Both were
+  // already decided when the customer picked their location; until now
+  // only the shop survived.
+  const [geo, setGeo] = useState<DeliveryContext>({
+    locationCode: null, lat: null, lng: null,
+  });
+
+  useEffect(() => {
+    let alive = true;
+    import("@/app/actions")
+      .then(({ getDeliveryContext }) => getDeliveryContext())
+      .then((ctx) => { if (alive) setGeo(ctx); })
+      .catch(() => { /* validation reports it below */ });
+    return () => { alive = false; };
+  }, []);
+
+  const set =
+    (key: keyof Form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((f) => ({ ...f, [key]: e.target.value }));
 
   if (items.length === 0 && orderStatus === "idle") {
     return (
@@ -35,6 +76,33 @@ export default function CheckoutPage() {
     );
   }
 
+  /**
+   * Refuse at the door.
+   *
+   * An order without a deliverable address is refused by the logistics
+   * system and has to be corrected here anyway — so catch it while the
+   * customer is still on the page and can simply type it in.
+   */
+  function validate(): string[] {
+    const e: string[] = [];
+
+    if (!form.firstName.trim()) e.push("First name is required.");
+    if (!/^\+?[0-9]{10,13}$/.test(form.phone.replace(/[\s-]/g, "")))
+      e.push("Enter a valid phone number — the delivery rider will call it.");
+    if (!form.line1.trim()) e.push("Flat, house or building is required.");
+    if (!form.city.trim()) e.push("City is required.");
+    if (!/^[0-9]{6}$/.test(form.pincode.trim())) e.push("Enter a 6-digit pincode.");
+
+    // The one nobody can type around. Anyone who chose their location
+    // before this feature existed has a shop but no pin.
+    if (!geo.locationCode)
+      e.push("Choose your delivery location using the pin at the top of the page.");
+    else if (geo.lat === null || geo.lng === null)
+      e.push("Set your delivery location on the map again so we can find your door.");
+
+    return e;
+  }
+
   const handlePayment = async () => {
     if (!user) {
       alert("Please log in to place an order.");
@@ -42,11 +110,22 @@ export default function CheckoutPage() {
       return;
     }
 
+    const problems = validate();
+    if (problems.length) {
+      setErrors(problems);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    setErrors([]);
     setOrderStatus("processing");
+
+    let createdOrderId: string | null = null;
+
     try {
       const { supabase } = await import("@/lib/supabase");
-      
-      // 1. Create the Order
+
+      // 1. Create the Order, carrying everything a delivery needs.
       const { data: orderData, error: orderError } = await supabase
         .from("orders")
         .insert({
@@ -55,13 +134,27 @@ export default function CheckoutPage() {
           total_amount: cartTotal,
           final_amount: cartTotal,
           payment_method: role === "B2B" ? "SHOP_CREDIT" : "RAZORPAY",
+
+          fulfilment_location_code: geo.locationCode,
+
+          delivery_recipient_name: `${form.firstName} ${form.lastName}`.trim(),
+          delivery_phone: form.phone.replace(/[\s-]/g, ""),
+          delivery_line1: form.line1.trim(),
+          delivery_line2: form.line2.trim() || null,
+          delivery_city: form.city.trim(),
+          delivery_pincode: form.pincode.trim(),
+          delivery_lat: geo.lat,
+          delivery_lng: geo.lng,
+          delivery_instructions: form.instructions.trim() || null,
         })
         .select()
         .single();
-        
-      if (orderError) throw orderError;
 
-      // 2. Create the Order Items
+      if (orderError) throw orderError;
+      createdOrderId = orderData.id;
+
+      // 2. Create the Order Items, keeping the rows so each line can be
+      //    matched back to the stock hold the reserve call places.
       const orderItemsToInsert = items.map(item => ({
         order_id: orderData.id,
         external_product_id: item.id,
@@ -71,41 +164,148 @@ export default function CheckoutPage() {
         quantity: item.quantity
       }));
 
-      const { error: itemsError } = await supabase
+      const { data: itemRows, error: itemsError } = await supabase
         .from("order_items")
-        .insert(orderItemsToInsert);
+        .insert(orderItemsToInsert)
+        .select();
 
       if (itemsError) throw itemsError;
 
       // 3. Reserve Inventory in the external system securely via Server Action
       const { reserveOrderInventory } = await import("@/app/actions");
       const inventoryItems = items.map(item => ({ sku: item.sku, quantity: item.quantity }));
-      await reserveOrderInventory(orderData.id, inventoryItems);
+      const reservation = await reserveOrderInventory(orderData.id, inventoryItems);
 
-      // Use the last segment of the UUID as a readable order ID
+      // 4. Keep the reservation ids.
+      //
+      // The reserve response carries one per line and was previously
+      // discarded. They are the only way to stop a stock hold expiring
+      // thirty minutes into a delivery: reserve returns them and no
+      // other inventory endpoint ever does.
+      const holdBySku = new Map<string, string>(
+        ((reservation?.items ?? []) as { sku: string; reservation_id?: string | null }[])
+          .filter((line) => Boolean(line.reservation_id))
+          .map((line) => [line.sku, line.reservation_id as string]));
+
+      if (holdBySku.size > 0) {
+        await Promise.all(
+          ((itemRows ?? []) as { id: string; sku: string }[])
+            .filter((row) => holdBySku.has(row.sku))
+            .map((row) =>
+              supabase
+                .from("order_items")
+                .update({ reservation_id: holdBySku.get(row.sku) })
+                .eq("id", row.id)));
+      }
+
+      // 5. Hand it to logistics. Never throws — see notifyLogistics.
+      const { notifyLogistics } = await import("@/app/actions");
+      await notifyLogistics(orderData.id);
+
       setOrderId(`ORD-${orderData.id.split("-")[0].toUpperCase()}`);
       clearCart();
       setOrderStatus("success");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      alert("Failed to place order: " + err.message);
+
+      // The order row may already exist while nothing is held. Mark it,
+      // rather than leaving an order that says PAID and can never be
+      // fulfilled.
+      if (createdOrderId) {
+        try {
+          const { supabase } = await import("@/lib/supabase");
+          await supabase.from("orders")
+            .update({ status: "FAILED" })
+            .eq("id", createdOrderId);
+        } catch (markErr) {
+          console.error("Could not mark the order FAILED", markErr);
+        }
+      }
+
+      const message = err instanceof Error ? err.message : "Something went wrong.";
+      setErrors([`Could not place the order: ${message}`]);
       setOrderStatus("idle");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
+
+  const field =
+    "border border-line rounded-lg px-4 py-3 focus:outline-none focus:border-green transition";
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
       {/* Left Column: Form & Details */}
       <div className="md:col-span-2 flex flex-col gap-8">
+        {errors.length > 0 && (
+          <div className="bg-[#fff1f0] border border-[#ffccc7] rounded-2xl p-5">
+            <h3 className="font-bold text-[#a8071a] mb-2">Please check the following</h3>
+            <ul className="list-disc pl-5 text-sm text-[#a8071a] flex flex-col gap-1">
+              {errors.map((e) => <li key={e}>{e}</li>)}
+            </ul>
+          </div>
+        )}
+
         <div className="bg-white border border-line rounded-3xl p-8 shadow-sm">
           <h2 className="text-2xl font-bold mb-6">Delivery Details</h2>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
             <div className="grid grid-cols-2 gap-4">
-              <input type="text" placeholder="First Name" className="border border-line rounded-lg px-4 py-3 focus:outline-none focus:border-green transition" />
-              <input type="text" placeholder="Last Name" className="border border-line rounded-lg px-4 py-3 focus:outline-none focus:border-green transition" />
+              <input
+                type="text" name="firstName" autoComplete="given-name"
+                value={form.firstName} onChange={set("firstName")}
+                placeholder="First Name" className={field}
+              />
+              <input
+                type="text" name="lastName" autoComplete="family-name"
+                value={form.lastName} onChange={set("lastName")}
+                placeholder="Last Name" className={field}
+              />
             </div>
-            <input type="tel" placeholder="Phone Number" className="border border-line rounded-lg px-4 py-3 focus:outline-none focus:border-green transition" />
-            <textarea placeholder="Delivery Address" rows={3} className="border border-line rounded-lg px-4 py-3 focus:outline-none focus:border-green transition"></textarea>
+
+            <input
+              type="tel" name="phone" autoComplete="tel" inputMode="tel"
+              value={form.phone} onChange={set("phone")}
+              placeholder="Phone Number" className={field}
+            />
+
+            <input
+              type="text" name="line1" autoComplete="address-line1"
+              value={form.line1} onChange={set("line1")}
+              placeholder="Flat / House / Building" className={field}
+            />
+            <input
+              type="text" name="line2" autoComplete="address-line2"
+              value={form.line2} onChange={set("line2")}
+              placeholder="Area / Landmark (optional)" className={field}
+            />
+
+            <div className="grid grid-cols-2 gap-4">
+              <input
+                type="text" name="city" autoComplete="address-level2"
+                value={form.city} onChange={set("city")}
+                placeholder="City" className={field}
+              />
+              <input
+                type="text" name="pincode" autoComplete="postal-code" inputMode="numeric"
+                maxLength={6}
+                value={form.pincode} onChange={set("pincode")}
+                placeholder="Pincode" className={field}
+              />
+            </div>
+
+            <textarea
+              name="instructions" rows={2}
+              value={form.instructions} onChange={set("instructions")}
+              placeholder="Delivery instructions (optional) — e.g. call on arrival, lift is out of service"
+              className={field}
+            />
+
+            <p className="text-xs text-ink-3">
+              {geo.lat !== null && geo.lng !== null ? (
+                <>📍 We&apos;ll deliver to the location you pinned. Change it using the pin at the top of the page.</>
+              ) : (
+                <>📍 No delivery location set — please pick one using the pin at the top of the page.</>
+              )}
+            </p>
           </form>
         </div>
 
@@ -148,7 +348,7 @@ export default function CheckoutPage() {
               </div>
             ))}
           </div>
-          
+
           <div className="border-t border-line pt-4 flex flex-col gap-2 mb-6">
             <div className="flex justify-between text-sm">
               <span className="text-ink-3">Subtotal</span>
@@ -164,7 +364,7 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          <button 
+          <button
             onClick={handlePayment}
             disabled={orderStatus === "processing"}
             className={`w-full py-4 rounded-xl font-bold text-lg transition shadow-md ${orderStatus === 'processing' ? 'bg-line text-ink-3 cursor-not-allowed' : 'bg-green text-white hover:bg-green-deep'}`}
