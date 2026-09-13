@@ -77,10 +77,40 @@ export default function OrdersPage() {
               </div>
 
               {/* Pipeline Tracker */}
-              <div className="bg-green-mist/30 rounded-2xl p-6 border border-green-soft">
-                <h4 className="font-bold text-sm mb-2">Delivery Status</h4>
-                <OrderPipeline currentStatus={order.status} />
-              </div>
+              {order.cancelled ? (
+                /* A cancelled order is not at a step on the way to the
+                   door. Putting one on the pipeline is exactly how
+                   every non-PAID order came to read "Delivered". */
+                <div className="bg-stone-100 rounded-2xl p-6 border border-stone-200">
+                  <h4 className="font-bold text-sm mb-1">Cancelled</h4>
+                  {order.message && (
+                    <p className="text-sm text-stone-600">{order.message}</p>
+                  )}
+                </div>
+              ) : (
+                <div className="bg-green-mist/30 rounded-2xl p-6 border border-green-soft">
+                  <h4 className="font-bold text-sm mb-2">Delivery Status</h4>
+                  <OrderPipeline currentStatus={order.status} />
+
+                  {/* What the delivery system last said. The wording
+                      is written there, so changing the tone is one
+                      deploy rather than two. */}
+                  {order.message && (
+                    <p className={`text-sm mt-3 ${order.reasonCode ? "text-amber-700" : "text-stone-600"}`}>
+                      {order.message}
+                    </p>
+                  )}
+
+                  {/* A first name and no number: there is no masking
+                      provider, and a rider's mobile is not something
+                      to publish to every customer. */}
+                  {order.riderFirstName && order.status === "out_for_delivery" && (
+                    <p className="text-sm text-stone-500 mt-1">
+                      {order.riderFirstName} is bringing it. To reach them, contact support.
+                    </p>
+                  )}
+                </div>
+              )}
 
             </div>
           ))}

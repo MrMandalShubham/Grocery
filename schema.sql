@@ -98,11 +98,44 @@ CREATE TABLE public.orders (
   delivery_lng numeric(9,6),
   delivery_instructions text,
 
+  -- ── What the logistics system tells us (migration 002) ──
+  --
+  -- Written only by POST /api/logistics/status, with the service
+  -- role, after a signature check. Separate from `status` because
+  -- the commercial state of an order and the position of a parcel
+  -- are different facts that move at different times.
+  delivery_step text
+    check (delivery_step is null or
+           delivery_step in ('placed','packed','out_for_delivery','delivered')),
+  delivery_message text,
+  delivery_reason_code text,
+  delivery_rider_first_name text,
+  -- Monotonic, from logistics. An event whose sequence is not
+  -- greater than this one is a replay or an overtake and is ignored:
+  -- at-least-once delivery guarantees nothing about order.
+  delivery_status_sequence bigint,
+  delivery_status_at timestamp with time zone,
+
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+
+-- Inbound delivery events, for idempotency: the sequence above
+-- rejects an OLD event, this recognises the SAME one arriving twice.
+-- Service-role only — RLS is on and there are deliberately no
+-- policies, because everything a customer needs is on their own
+-- order row, which their existing SELECT policy already covers.
+CREATE TABLE IF NOT EXISTS public.logistics_status_event (
+  event_id    text primary key,
+  order_id    uuid references public.orders(id) on delete cascade,
+  sequence    bigint,
+  applied     boolean not null default false,
+  received_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+ALTER TABLE public.logistics_status_event ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Users can view their own orders" 
   ON public.orders FOR SELECT 
