@@ -45,6 +45,10 @@ CREATE TABLE public.addresses (
   city text not null,
   state text not null,
   pincode text not null,
+  -- Captured from the customer's map pin. The only geocode in this
+  -- estate; a rider cannot navigate to an address without it.
+  lat numeric(9,6),
+  lng numeric(9,6),
   is_default boolean default false,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
@@ -67,8 +71,35 @@ CREATE TABLE public.orders (
   payment_method text not null,
   razorpay_order_id text,
   razorpay_payment_id text,
+
+  -- Written back by the logistics system: DLV-YYYY-NNNNNN.
   logistics_tracking_id text,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+
+  -- Which shop fulfils this order. Previously this lived only in the
+  -- `inventory_location` cookie, so nothing downstream could tell
+  -- where the parcel should be collected from.
+  fulfilment_location_code text,
+
+  -- ── The delivery snapshot ──
+  --
+  -- A snapshot, not a join to `addresses`. These are facts about where
+  -- THIS parcel was sent. A customer editing their saved address must
+  -- not rewrite where last month's order went, nor redirect a rider
+  -- who has already left the shop.
+  address_id uuid references public.addresses(id),
+  delivery_recipient_name text,
+  delivery_phone text,
+  delivery_line1 text,
+  delivery_line2 text,
+  delivery_city text,
+  delivery_state text,
+  delivery_pincode text,
+  delivery_lat numeric(9,6),
+  delivery_lng numeric(9,6),
+  delivery_instructions text,
+
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
@@ -81,6 +112,14 @@ CREATE POLICY "Users can insert their own orders"
   ON public.orders FOR INSERT 
   WITH CHECK (auth.uid() = user_id);
 
+-- Without this, an UPDATE through the anon key matches zero rows and
+-- reports success -- so a checkout whose inventory reserve failed
+-- could never be marked FAILED, and would sit looking PAID forever.
+CREATE POLICY "Users can update their own orders"
+  ON public.orders FOR UPDATE
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
 
 -- 4. Order Items Table
 CREATE TABLE public.order_items (
@@ -91,6 +130,11 @@ CREATE TABLE public.order_items (
   name text not null,
   price_at_purchase numeric not null,
   quantity integer not null,
+
+  -- Returned by the inventory reserve call and stored here. It is the
+  -- only way to stop a stock hold expiring mid-delivery: reserve
+  -- returns it and no other inventory endpoint ever does.
+  reservation_id uuid,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
@@ -112,6 +156,18 @@ CREATE POLICY "Users can insert order items"
     EXISTS (
       SELECT 1 FROM public.orders 
       WHERE orders.id = order_items.order_id 
+      AND orders.user_id = auth.uid()
+    )
+  );
+
+-- Items are written once at checkout, then updated once to attach the
+-- reservation id the reserve call returned.
+CREATE POLICY "Users can update their own order items"
+  ON public.order_items FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.orders
+      WHERE orders.id = order_items.order_id
       AND orders.user_id = auth.uid()
     )
   );
