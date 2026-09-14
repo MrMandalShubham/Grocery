@@ -179,10 +179,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "no such order" }, { status: 404 });
   }
 
+  // The obvious early exit, kept only as a cheap shortcut. It is NOT
+  // the guard — see the conditional UPDATE below for why.
   const held = order.delivery_status_sequence;
   if (held != null && sequence <= Number(held)) {
-    // Not an error. The event arrived, it was simply overtaken by a
-    // newer one — telling the sender to retry would be worse.
     return NextResponse.json(
       { ok: true, ignored: "stale", held: Number(held) }, { status: 200 });
   }
@@ -207,11 +207,39 @@ export async function POST(req: NextRequest) {
   // sell it back to them.
   if (status && order.status !== "CANCELLED") patch.status = status;
 
-  const { error: writeErr } = await db.from("orders").update(patch).eq("id", orderId);
+  // ── The guard that actually holds ──
+  //
+  // Comparing the sequence in JavaScript between a read and a write is
+  // a read-modify-write race, and the sender makes it likely rather
+  // than rare: the outbound worker drains a batch CONCURRENTLY, so two
+  // events for one order are routinely in flight together.
+  //
+  // It happened on the first real run. "delivered" (sequence 21) and
+  // "out for delivery" (18) were sent at the same time; both read the
+  // stored sequence while it was still 14, both passed the check
+  // above, and 18 landed last. The customer's order page said "on its
+  // way" for a parcel that had been handed over.
+  //
+  // So the condition goes in the WHERE clause, where the database
+  // applies it atomically. A losing write updates no rows and is
+  // reported as stale — which is exactly what it is.
+  const { data: updated, error: writeErr } = await db
+    .from("orders")
+    .update(patch)
+    .eq("id", orderId)
+    .or(`delivery_status_sequence.is.null,delivery_status_sequence.lt.${sequence}`)
+    .select("id, delivery_status_sequence");
 
   if (writeErr) {
     console.error("[logistics] could not update the order:", writeErr.message);
     return NextResponse.json({ error: "could not update the order" }, { status: 503 });
+  }
+
+  if (!updated || updated.length === 0) {
+    // Another event for this order won the race and was newer.
+    await db.from("logistics_status_event")
+      .update({ applied: false }).eq("event_id", eventId);
+    return NextResponse.json({ ok: true, ignored: "stale" }, { status: 200 });
   }
 
   await db.from("logistics_status_event")
