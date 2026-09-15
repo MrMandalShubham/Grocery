@@ -176,29 +176,75 @@ export default function CheckoutPage() {
       const inventoryItems = items.map(item => ({ sku: item.sku, quantity: item.quantity }));
       const reservation = await reserveOrderInventory(orderData.id, inventoryItems);
 
-      // 4. Keep the reservation ids.
+      // 4. Keep the reservation ids — ALL of them.
       //
-      // The reserve response carries one per line and was previously
-      // discarded. They are the only way to stop a stock hold expiring
-      // thirty minutes into a delivery: reserve returns them and no
-      // other inventory endpoint ever does.
-      const holdBySku = new Map<string, string>(
-        ((reservation?.items ?? []) as { sku: string; reservation_id?: string | null }[])
-          .filter((line) => Boolean(line.reservation_id))
-          .map((line) => [line.sku, line.reservation_id as string]));
-
-      if (holdBySku.size > 0) {
-        await Promise.all(
-          ((itemRows ?? []) as { id: string; sku: string }[])
-            .filter((row) => holdBySku.has(row.sku))
-            .map((row) =>
-              supabase
-                .from("order_items")
-                .update({ reservation_id: holdBySku.get(row.sku) })
-                .eq("id", row.id)));
+      // Inventory fills a lot-tracked line FEFO, so one line can come
+      // back as several holds: 10 units as 4 from the lot expiring
+      // Friday and 6 from the one expiring Monday. Keying a Map by sku
+      // would silently keep the last and lose the rest, and a hold
+      // nothing recorded is a hold nothing confirms and nothing tells
+      // logistics about.
+      //
+      // Today every product has one lot so nothing splits. The code is
+      // written for the day receiving books a second one.
+      const holdsBySku = new Map<string, string[]>();
+      for (const line of (reservation?.items ?? []) as
+             { sku: string; reservation_id?: string | null }[]) {
+        if (!line.reservation_id) continue;
+        const ids = holdsBySku.get(line.sku) ?? [];
+        ids.push(line.reservation_id);
+        holdsBySku.set(line.sku, ids);
       }
 
-      // 5. Hand it to logistics. Never throws — see notifyLogistics.
+      if (holdsBySku.size > 0) {
+        await Promise.all(
+          ((itemRows ?? []) as { id: string; sku: string }[])
+            .filter((row) => holdsBySku.has(row.sku))
+            .map((row) => {
+              const ids = holdsBySku.get(row.sku) as string[];
+              return supabase
+                .from("order_items")
+                .update({
+                  // The first is the FEFO-soonest lot. Kept in the old
+                  // single column because the logistics payload reads it.
+                  reservation_id: ids[0],
+                  reservation_ids: ids,
+                })
+                .eq("id", row.id);
+            }));
+      }
+
+      // 5. Confirm the holds, so they stop expiring.
+      //
+      // Until this call existed every hold lapsed 30 minutes after
+      // checkout, mid-delivery, and the commit that followed became a
+      // stock incident with the parcel already handed over. Reported,
+      // never thrown — see confirmOrderInventory.
+      const allHolds = [...holdsBySku.values()].flat();
+      if (allHolds.length > 0) {
+        const { confirmOrderInventory } = await import("@/app/actions");
+        const { failed } = await confirmOrderInventory(orderData.id, allHolds);
+        const lost = new Set(failed.map((f) => f.id));
+
+        // Stamp only the lines whose holds ALL confirmed. A line with
+        // one hold still ticking is not confirmed, and leaving it
+        // unstamped is what puts it in front of the reconcile sweep.
+        const done = ((itemRows ?? []) as { id: string; sku: string }[])
+          .filter((row) => {
+            const ids = holdsBySku.get(row.sku);
+            return ids?.length && ids.every((id) => !lost.has(id));
+          })
+          .map((row) => row.id);
+
+        if (done.length > 0) {
+          await supabase
+            .from("order_items")
+            .update({ reservation_confirmed_at: new Date().toISOString() })
+            .in("id", done);
+        }
+      }
+
+      // 6. Hand it to logistics. Never throws — see notifyLogistics.
       const { notifyLogistics } = await import("@/app/actions");
       await notifyLogistics(orderData.id);
 
