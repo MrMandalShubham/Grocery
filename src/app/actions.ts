@@ -7,6 +7,47 @@ export async function reserveOrderInventory(orderId: string, items: { sku: strin
   return await reserveInventory(orderId, items);
 }
 
+/**
+ * Stop this order's stock holds expiring.
+ *
+ * Called straight after the reserve, because that is the moment the
+ * customer has paid and the hold stops being provisional.
+ *
+ * ── Why it reports rather than throws ──
+ *
+ * The order exists and the stock is held either way. A confirm that
+ * fails leaves the hold ticking on its original 30-minute TTL, which
+ * is exactly where every order was before this call existed — bad,
+ * but not worse than yesterday, and not a reason to fail a checkout
+ * the customer has already paid for.
+ *
+ * So each line is attempted independently and the failures come back
+ * for the caller to log. `reconcileOrders` sweeps up anything left
+ * unconfirmed, and the database refuses to confirm twice, so a repeat
+ * is free.
+ */
+export async function confirmOrderInventory(
+  orderId: string,
+  reservationIds: string[],
+): Promise<{ confirmed: number; failed: { id: string; error: string }[] }> {
+  const { confirmReservation } = await import("@/services/inventory");
+
+  const results = await Promise.allSettled(
+    reservationIds.map((id) => confirmReservation(id, orderId)));
+
+  const failed = results.flatMap((r, i) =>
+    r.status === "rejected"
+      ? [{ id: reservationIds[i],
+           error: r.reason instanceof Error ? r.reason.message : String(r.reason) }]
+      : []);
+
+  for (const f of failed) {
+    console.error("[inventory] could not confirm hold", f.id, "for order", orderId, f.error);
+  }
+
+  return { confirmed: reservationIds.length - failed.length, failed };
+}
+
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
 export async function setLocationCookie(locationId: string) {

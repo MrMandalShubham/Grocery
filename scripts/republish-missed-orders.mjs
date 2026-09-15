@@ -1,8 +1,21 @@
-// Republish orders whose logistics handoff never landed.
+// Put the estate back in the state checkout meant to leave it in.
 //
-//   npm run logistics:republish
-//   npm run logistics:republish -- --older-than 15 --limit 100
-//   npm run logistics:republish -- --dry-run
+//   npm run reconcile
+//   npm run reconcile -- --older-than 15 --limit 100
+//   npm run reconcile -- --dry-run
+//   npm run reconcile -- --only holds      confirm stock holds only
+//   npm run reconcile -- --only logistics  republish orders only
+//
+// Two jobs, because checkout has two steps that report their failures
+// instead of raising them, and each leaves a different kind of mess:
+//
+//   holds      a line holding stock on a 30-minute clock that nothing
+//              stopped. It lapses mid-delivery and the commit that
+//              follows becomes a stock incident with the parcel
+//              already handed over.
+//   logistics  an order placed, paid and reserved that the delivery
+//              system has never heard of. Nobody is dispatched, and
+//              nothing says so.
 //
 // ── Why this is needed ──
 //
@@ -53,6 +66,14 @@ const value = (n, d) => {
 const olderThan = value("older-than", 5);
 const limit = value("limit", 50);
 
+const only = (() => {
+  const i = args.indexOf("--only");
+  return i >= 0 && args[i + 1] ? args[i + 1] : null;
+})();
+
+const doHolds = only === null || only === "holds";
+const doLogistics = only === null || only === "logistics";
+
 const { republishMissedOrders } = await import("../src/services/logistics.ts");
 
 if (flag("dry-run")) {
@@ -90,6 +111,41 @@ if (flag("dry-run")) {
   process.exit(0);
 }
 
+// ── 1. Confirm holds that never stopped expiring ──
+if (doHolds && !flag("dry-run")) {
+  const { reconcileHolds } = await import("../src/services/reconcile.ts");
+
+  let holds;
+  try {
+    holds = await reconcileHolds(Math.min(olderThan, 2), limit);
+  } catch (e) {
+    console.error(`
+  ${e instanceof Error ? e.message : e}
+`);
+    process.exit(1);
+  }
+
+  if (holds.length === 0) {
+    console.log("
+  No unconfirmed stock holds.");
+  } else {
+    const stuck = holds.filter((h) => h.failed.length > 0);
+    const fixed = holds.length - stuck.length;
+    console.log(`
+  Confirmed the holds on ${fixed} line(s).`);
+    for (const h of stuck) {
+      console.log(`    FAIL  order ${h.orderId}  line ${h.lineId}`);
+      for (const f of h.failed) console.log(`          ${f.id}  ${f.error}`);
+    }
+  }
+}
+
+if (!doLogistics) {
+  console.log();
+  process.exit(0);
+}
+
+// ── 2. Republish orders logistics never heard of ──
 let results;
 try {
   results = await republishMissedOrders(olderThan, limit);
